@@ -1,0 +1,75 @@
+main {
+  min-height: 80vh;
+  user-select: none;
+}
+
+.rating span {
+  margin: 0.1rem;
+}
+
+.rating svg {
+  color: #E6CD69;
+}
+
+.rating-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding-left: 0.5rem;
+}
+
+.product-title {
+  height: 2.5em; /* Set a fixed height */
+  overflow: hidden; /* Hide overflow content */
+  text-overflow: ellipsis; /* Add ellipsis for long text */
+  white-space: nowrap; /* Prevent wrapping */
+
+  font-size: 1.1rem;
+  color: #222;
+  text-decoration: none;
+}
+
+table td,
+table th {
+  text-align: center;
+}
+
+.review {
+  margin-top: 30px;
+}
+
+.review h2 {
+  font-size: 24px;
+  background: #f4f4f4;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.review button {
+  margin-top: 10px;
+}
+
+.carousel-caption {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.add-to-cart-btn {
+  background-color: #30848e;
+  border-color: #30848e;
+  color: white;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #256a72;
+  border-color: #256a72;
+  color: white;
+}
+
+.add-to-cart-btn:disabled {
+  background-color: #9aaeb1;
+  border-color: #9aaeb1;
+}
