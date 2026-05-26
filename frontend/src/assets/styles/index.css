@@ -73,3 +73,14 @@ table th {
   background-color: #9aaeb1;
   border-color: #9aaeb1;
 }
+.dropdown-menu {
+  background-color: #1e1e1e !important;
+  border: 1px solid #333 !important;
+}
+.dropdown-item {
+  color: #ffffff !important;
+}
+.dropdown-item:hover {
+  background-color: #ff4a4a !important;
+  color: #ffffff !important;
+}

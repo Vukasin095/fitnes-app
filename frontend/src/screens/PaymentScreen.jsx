@@ -1,58 +1,70 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Col, Card, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Col } from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
+import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../slices/cartSlice';
 
 const PaymentScreen = () => {
-    const [paymentMethod, setPaymentMethod] = useState('PayPal');
+  const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart);
+  const { gymCode } = cart;
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  // Bezbednosna provera: ako nema koda iz koraka 2, vrati ga nazad
+  useEffect(() => {
+    if (!gymCode) {
+      navigate('/gym-code');
+    }
+  }, [gymCode, navigate]);
 
-    const cart = useSelector((state) => state.cart);
-    const { shippingAddress } = cart;
+  const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
-    useEffect(() => {
-        if (!shippingAddress) {
-            navigate('/shipping');
-        }
-    }, [shippingAddress, navigate]);
+  const dispatch = useDispatch();
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(savePaymentMethod(paymentMethod));
-        navigate('/placeorder');
-    };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(savePaymentMethod(paymentMethod));
+    navigate('/placeorder'); // Vodi na poslednji korak pregleda
+  };
 
-    return (
-        <FormContainer>
-            <CheckoutSteps step1 step2 step3 />
-            <h1>Payment Method</h1>
+  return (
+    <Container className='my-4'>
+      <CheckoutSteps step1 step2 step3 />
+
+      <div className='d-flex justify-content-center align-items-center mt-4'>
+        <Card className='p-4 shadow-lg border-0 bg-dark text-white rounded' style={{ width: '100%', maxWidth: '450px' }}>
+          <Card.Body>
+            <h3 className='text-uppercase fw-bold text-center mb-3' style={{ color: '#ff4a4a', letterSpacing: '1px' }}>
+              Način Plaćanja
+            </h3>
+            <p className='text-center text-muted small mb-4'>Odaberite opciju za realizaciju Vaše online uplate.</p>
+
             <Form onSubmit={submitHandler}>
-                <Form.Group>
-                    <Form.Label as='legend'>Odaberite način plaćanja</Form.Label>
-                    <Col>
-                        <Form.Check
-                            type='radio'
-                            className='my-2'
-                            label='PayPal ili Kreditna kartica'
-                            id='PayPal'
-                            name='paymentMethod'
-                            value='PayPal'
-                            checked
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        ></Form.Check>
-                    </Col>
-                </Form.Group>
-                <Button type='submit' variant='primary'>
-                    Nastavite
-                </Button>
+              <Form.Group className='mb-4 text-start bg-secondary p-3 rounded'>
+                <Form.Label as='legend' className='fw-bold text-warning small text-uppercase mb-2'>Dostupne Metode</Form.Label>
+                <Col>
+                  <Form.Check
+                    type='radio'
+                    label='Online Kartica / PayPal'
+                    id='PayPal'
+                    name='paymentMethod'
+                    value='PayPal'
+                    checked
+                    className='fw-bold my-2 fs-5'
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  ></Form.Check>
+                </Col>
+              </Form.Group>
+
+              <Button type='submit' className='w-100 fw-bold text-uppercase py-2 border-0' style={{ backgroundColor: '#ff4a4a' }}>
+                Dalje na Pregled →
+              </Button>
             </Form>
-        </FormContainer>
-    )
-}
+          </Card.Body>
+        </Card>
+      </div>
+    </Container>
+  );
+};
 
 export default PaymentScreen;

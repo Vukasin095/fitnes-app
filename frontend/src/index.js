@@ -22,6 +22,10 @@ import RegisterScreen from './screens/RegisterScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import GymMembershipScreen from './screens/GymMembershipScreen';
+import GymCodeScreen from './screens/GymCodeScreen';
+import OrderScreen from './screens/OrderScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,11 +35,14 @@ const router = createBrowserRouter(
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
-
+    <Route path='/gym-membership' element={<GymMembershipScreen />} />
       <Route path='' element={<PrivateRoute />} >
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/placeorder' element={<PlaceOrderScreen />} />
+        <Route path='/gym-code' element={<GymCodeScreen />} />
+        <Route path='/order/:id' element={<OrderScreen />} />
+        <Route path='/profile' element={<ProfileScreen />} />
       </Route>
     </Route>
   )
