@@ -19,6 +19,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    activateMembership: builder.mutation({
+      query: () => ({
+        url: '/api/users/membership/activate',
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -26,5 +32,6 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
-  useProfileMutation, // Sada će ovo raditi!
+  useProfileMutation,
+  useActivateMembershipMutation,
 } = usersApiSlice;

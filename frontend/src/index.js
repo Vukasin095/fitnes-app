@@ -23,6 +23,11 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import GymMembershipScreen from './screens/GymMembershipScreen';
+import MembershipProductScreen from './screens/MembershipProductScreen';
+import MembershipCheckoutScreen from './screens/MembershipCheckoutScreen';
+import MembershipCartScreen from './screens/MembershipCartScreen';
+import MembershipPaymentScreen from './screens/MembershipPaymentScreen';
+import MembershipPlaceOrderScreen from './screens/MembershipPlaceOrderScreen';
 import GymCodeScreen from './screens/GymCodeScreen';
 import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -36,7 +41,12 @@ const router = createBrowserRouter(
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
     <Route path='/gym-membership' element={<GymMembershipScreen />} />
+    <Route path='/membership/:id' element={<MembershipProductScreen />} />
       <Route path='' element={<PrivateRoute />} >
+        <Route path='/membership-cart' element={<MembershipCartScreen />} />
+        <Route path='/membership-payment' element={<MembershipPaymentScreen />} />
+        <Route path='/membership-checkout' element={<MembershipCheckoutScreen />} />
+        <Route path='/membership-placeorder' element={<MembershipPlaceOrderScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/placeorder' element={<PlaceOrderScreen />} />

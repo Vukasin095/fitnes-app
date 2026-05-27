@@ -1,15 +1,13 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { addToCart } from '../slices/cartSlice';
 import { FaDumbbell, FaCheck, FaLock } from 'react-icons/fa';
 
 const GymMembershipScreen = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  console.log("Korisnik:", userInfo);
+  const membershipActive = userInfo?.membershipActive && userInfo?.membershipExpires && new Date(userInfo.membershipExpires) > new Date();
 
   const paketi = [
     { _id: 'm1', name: 'Mesečna Članarina', price: 3500, desc: 'Pristup teretani 30 dana' },
@@ -18,8 +16,7 @@ const GymMembershipScreen = () => {
   ];
 
   const handleKupi = (paket) => {
-    dispatch(addToCart({ ...paket, qty: 1, image: '/images/membership.jpg' }));
-    navigate('/shipping');
+    navigate(`/membership/${paket._id}`);
   };
 
   return (
@@ -48,13 +45,13 @@ const GymMembershipScreen = () => {
                 <Button 
                   className='w-100 py-3 fw-bold text-uppercase border-0' 
                   style={{ 
-                    backgroundColor: userInfo?.gymCode ? '#ff4a4a' : '#6c757d',
-                    cursor: userInfo?.gymCode ? 'pointer' : 'not-allowed'
+                    backgroundColor: membershipActive ? '#6c757d' : userInfo?.gymCode ? '#ff4a4a' : '#6c757d',
+                    cursor: membershipActive ? 'not-allowed' : userInfo?.gymCode ? 'pointer' : 'not-allowed'
                   }}
-                  disabled={!userInfo?.gymCode}
+                  disabled={!userInfo?.gymCode || membershipActive}
                   onClick={() => handleKupi(paket)}
                 >
-                  {userInfo?.gymCode ? 'Izaberi paket' : <><FaLock className='me-2' /> Potreban članski kod</>}
+                  {membershipActive ? 'Već imate aktivnu članarinu' : userInfo?.gymCode ? 'Izaberi paket' : <><FaLock className='me-2' /> Potreban članski kod</>}
                 </Button>
 
                 {!userInfo?.gymCode && (
@@ -73,6 +70,13 @@ const GymMembershipScreen = () => {
                     >
                       Unesite kod na profilu
                     </Link>
+                  </div>
+                )}
+                {membershipActive && (
+                  <div className='mt-3 text-center'>
+                    <p className='text-muted' style={{ fontSize: '0.8rem', marginBottom: '0' }}>
+                      Vaša trenutna članarina je i dalje aktivna. Možete kupiti novu nakon isteka.
+                    </p>
                   </div>
                 )}
               </div>

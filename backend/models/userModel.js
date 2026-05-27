@@ -30,6 +30,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    membershipActive: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    membershipStart: {
+      type: Date,
+      default: null,
+    },
     membershipExpires: {
       type: Date,
       default: null,

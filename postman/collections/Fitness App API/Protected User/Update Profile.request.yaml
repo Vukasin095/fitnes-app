@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/users/profile"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "name": "Petar Novi",
+      "email": "petar.novi@example.com",
+      "password": "novaLozinka123",
+      "gymCode": "FITNES2026"
+    }
+order: 2000

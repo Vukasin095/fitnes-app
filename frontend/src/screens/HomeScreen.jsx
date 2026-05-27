@@ -11,10 +11,10 @@ const HomeScreen = () => {
   // Stanje koje prati trenutno izabranu kategoriju filtera
   const [selectedCategory, setSelectedCategory] = useState('Sve');
 
-  // Filtriranje proizvoda na osnovu izabrane kategorije
+  // Filtriranje proizvoda na osnovu izabrane kategorije (isključi Članarine)
   const filteredProducts = products
     ? selectedCategory === 'Sve'
-      ? products
+      ? products.filter((p) => p.category.toLowerCase() !== 'članarine')
       : products.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase())
     : [];
 

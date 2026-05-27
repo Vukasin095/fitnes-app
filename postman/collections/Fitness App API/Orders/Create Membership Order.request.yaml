@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseUrl}}/orders"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "orderItems": [
+        {
+          "name": "Mesečna Članarina",
+          "qty": 1,
+          "image": "/images/membership.jpg",
+          "price": 3500,
+          "isMembership": true,
+          "product": "m1"
+        }
+      ],
+      "paymentMethod": "PayPal",
+      "itemsPrice": 3500,
+      "shippingPrice": 0,
+      "taxPrice": 0,
+      "totalPrice": 3500
+    }
+order: 2000

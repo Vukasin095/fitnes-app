@@ -14,17 +14,21 @@ const addOrderItems = asyncHandler(async (req, res) => {
     else {
         const order = new Order({
             orderItems: orderItems.map((x) => ({
-                ...x,
+                name: x.name,
+                qty: x.qty,
+                image: x.image,
+                price: x.price,
+                isMembership: x.isMembership || false,
                 product: x._id,
-                _id: undefined
             })),
             user: req.user._id,
-            shippingAddress,
+            shippingAddress: shippingAddress || {},
             paymentMethod,
             itemsPrice,
             taxPrice,
             shippingPrice,
-            totalPrice
+            totalPrice,
+            status: 'Processing',
         });
 
         const createdOrder = await order.save();
@@ -38,7 +42,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access Private
 
 const getMyOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.status(200).json(orders);
 });
 
@@ -52,7 +56,12 @@ const getOrderById = asyncHandler(async (req, res) => {
     );
 
     if (order) {
-        res.status(200).json(order);
+        if (order.user._id.toString() === req.user._id.toString() || req.user.isAdmin) {
+            res.status(200).json(order);
+        } else {
+            res.status(401);
+            throw new Error('Not authorized to view this order');
+        }
     } else {
         res.status(404);
         throw new Error('Porudžbina nije pronađena');

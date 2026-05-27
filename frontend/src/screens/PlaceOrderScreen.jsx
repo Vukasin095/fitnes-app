@@ -13,26 +13,40 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const membership = useSelector((state) => state.membership);
 
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
   useEffect(() => {
+    if (membership.membershipPackage) {
+      navigate('/membership-placeorder');
+      return;
+    }
+
+    if (cart.cartItems.length === 0) {
+      navigate('/cart');
+      return;
+    }
+
     if (!cart.paymentMethod) {
       navigate('/payment');
     }
-  }, [cart.paymentMethod, navigate]);
+  }, [cart.cartItems.length, cart.paymentMethod, membership.membershipPackage, navigate]);
 
   const placeOrderHandler = async () => {
     try {
-      const res = await createOrder({
+      const orderData = {
         orderItems: cart.cartItems,
         paymentMethod: cart.paymentMethod,
-        gymCode: cart.gymCode,
         itemsPrice: cart.itemsPrice,
+        shippingAddress: cart.shippingAddress,
+        gymCode: cart.gymCode,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-      }).unwrap();
+      };
+
+      const res = await createOrder(orderData).unwrap();
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
@@ -42,27 +56,15 @@ const PlaceOrderScreen = () => {
 
   return (
     <Container className='my-4'>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 step4 step2Label='Dostava' step2Link='/shipping' />
       
       <Row className='mt-4'>
         {/* LEVA STRANA: DETALJI */}
         <Col md={8}>
           <ListGroup variant='flush' className='shadow-sm rounded overflow-hidden'>
-            <ListGroup.Item className='bg-dark text-white p-3'>
-              <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1.1rem' }}>
-                1. Verifikacija & Članstvo
-              </h4>
-            </ListGroup.Item>
-            <ListGroup.Item className='p-3 bg-light text-dark'>
-              <p className='mb-1'><strong>Uneti Članski Kod:</strong></p>
-              <span className='badge bg-dark px-3 py-2 fs-6 text-uppercase fw-bold' style={{ letterSpacing: '1px', color: '#ff4a4a' }}>
-                {cart.gymCode || 'Nije unet kod'}
-              </span>
-            </ListGroup.Item>
-
             <ListGroup.Item className='bg-dark text-white p-3 mt-3'>
               <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1.1rem' }}>
-                2. Metod Plaćanja
+                1. Metod Plaćanja
               </h4>
             </ListGroup.Item>
             <ListGroup.Item className='p-3 bg-light text-dark'>
@@ -71,7 +73,7 @@ const PlaceOrderScreen = () => {
 
             <ListGroup.Item className='bg-dark text-white p-3 mt-3'>
               <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1.1rem' }}>
-                3. Artikli u Korpi
+                2. Artikli
               </h4>
             </ListGroup.Item>
             <ListGroup.Item className='p-3 bg-light text-dark'>

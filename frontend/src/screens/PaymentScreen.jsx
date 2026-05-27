@@ -5,31 +5,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../slices/cartSlice';
 
+// PayPal API ključ - zameni sa pravim ključem
+// eslint-disable-next-line no-unused-vars
+const PAYPAL_API_KEY = process.env.REACT_APP_PAYPAL_CLIENT_ID || 'YOUR_PAYPAL_CLIENT_ID_HERE';
+
 const PaymentScreen = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
-  const { gymCode } = cart;
-
-  // Bezbednosna provera: ako nema koda iz koraka 2, vrati ga nazad
-  useEffect(() => {
-    if (!gymCode) {
-      navigate('/gym-code');
-    }
-  }, [gymCode, navigate]);
 
   const [paymentMethod, setPaymentMethod] = useState('PayPal');
-
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (cart.cartItems.length === 0) {
+      navigate('/cart');
+      return;
+    }
+
+    if (!cart.shippingAddress) {
+      navigate('/shipping');
+    }
+  }, [cart.cartItems.length, cart.shippingAddress, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
-    navigate('/placeorder'); // Vodi na poslednji korak pregleda
+    navigate('/placeorder');
   };
 
   return (
     <Container className='my-4'>
-      <CheckoutSteps step1 step2 step3 />
+      <CheckoutSteps step1 step2 step3 step2Label='Dostava' step2Link='/shipping' />
 
       <div className='d-flex justify-content-center align-items-center mt-4'>
         <Card className='p-4 shadow-lg border-0 bg-dark text-white rounded' style={{ width: '100%', maxWidth: '450px' }}>

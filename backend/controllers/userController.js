@@ -13,15 +13,16 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
 
-    
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      isGymMember: user.isGymMember, 
+      isGymMember: user.isGymMember,
+      gymCode: user.gymCode,
+      membershipActive: user.membershipActive,
+      membershipStart: user.membershipStart,
       membershipExpires: user.membershipExpires,
-      gymCode: user.gymCode, 
     });
   } else {
     res.status(401);
@@ -41,17 +42,18 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Korisnik već postoji');
   }
 
-  // Ako je uneo ispravan kod, odmah postaje član teretane i članarina mu važi mesec dana
+  const now = new Date();
   const isGymMember = gymCode === 'FITNES2026';
-  const membershipExpires = isGymMember ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null;
 
   const user = await User.create({
     name,
     email,
     password,
     gymCode: isGymMember ? gymCode : '',
-    isGymMember,
-    membershipExpires,
+    isGymMember: isGymMember,
+    membershipActive: false,
+    membershipStart: null,
+    membershipExpires: null,
   });
 
   if (user) {
@@ -63,6 +65,9 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isGymMember: user.isGymMember,
+      gymCode: user.gymCode,
+      membershipActive: user.membershipActive,
+      membershipStart: user.membershipStart,
       membershipExpires: user.membershipExpires,
     });
   } else {
@@ -88,11 +93,18 @@ const logoutUser = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
+      const membershipActive = user.membershipExpires && user.membershipExpires > Date.now();
+
         res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            isGymMember: user.isGymMember,
+            gymCode: user.gymCode,
+            membershipActive: user.membershipActive,
+            membershipStart: user.membershipStart,
+            membershipExpires: user.membershipExpires,
         });
     }
     else {
@@ -116,11 +128,54 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     // Ako korisnik naknadno unese kod na profilu
+    const now = new Date();
     if (req.body.gymCode && req.body.gymCode === 'FITNES2026' && !user.isGymMember) {
       user.gymCode = req.body.gymCode;
       user.isGymMember = true;
-      user.membershipExpires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // Aktivacija na 30 dana
+      user.membershipActive = false;
+      user.membershipStart = null;
+      user.membershipExpires = null;
     }
+
+    const updatedUser = await user.save();
+
+    const membershipActive = updatedUser.membershipActive && updatedUser.membershipExpires && updatedUser.membershipExpires > new Date();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      isGymMember: updatedUser.isGymMember,
+      gymCode: updatedUser.gymCode,
+      membershipActive: membershipActive,
+      membershipStart: updatedUser.membershipStart,
+      membershipExpires: updatedUser.membershipExpires,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Korisnik nije pronađen');
+  }
+});
+
+// @desc    Activate membership after purchase
+// @route   POST /api/users/membership/activate
+// @access  Private
+const activateMembership = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    const now = new Date();
+    
+    // Ako korisnik nije već registrovani član, postavimo ga sada
+    if (!user.isGymMember) {
+      user.isGymMember = true;
+      user.gymCode = 'MEMBERSHIP_PURCHASE';
+    }
+
+    user.membershipActive = true;
+    user.membershipStart = now;
+    user.membershipExpires = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     const updatedUser = await user.save();
 
@@ -130,6 +185,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       isGymMember: updatedUser.isGymMember,
+      gymCode: updatedUser.gymCode,
+      membershipActive: updatedUser.membershipActive,
+      membershipStart: updatedUser.membershipStart,
       membershipExpires: updatedUser.membershipExpires,
     });
   } else {
@@ -163,6 +221,6 @@ const updateUser = asyncHandler(async (req, res) => {
     res.send('Update user');
 });
 export {
-    authUser, registerUser, logoutUser, getUserProfile, updateUserProfile,
+    authUser, registerUser, logoutUser, getUserProfile, updateUserProfile, activateMembership,
     getUsers, getUserById, deleteUser, updateUser
 };

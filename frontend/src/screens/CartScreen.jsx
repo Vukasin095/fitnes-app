@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card, Container } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import { addToCart, removeFromCart } from '../slices/cartSlice';
 
@@ -26,9 +25,6 @@ const CartScreen = () => {
   const checkoutHandler = () => {
     if (!userInfo) {
       navigate('/login');
-    } else if (!userInfo.gymCode) {
-      toast.error('Ova akcija zahteva status člana kluba (unesite kod na profilu).');
-      navigate('/profile');
     } else {
       navigate('/shipping');
     }

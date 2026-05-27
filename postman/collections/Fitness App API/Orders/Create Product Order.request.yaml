@@ -1,0 +1,32 @@
+$kind: http-request
+url: "{{baseUrl}}/orders"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "orderItems": [
+        {
+          "name": "Majica",
+          "qty": 1,
+          "image": "https://example.com/majica.jpg",
+          "price": 1000,
+          "product": "64abc123def4567890abcd12"
+        }
+      ],
+      "shippingAddress": {
+        "address": "Bulevar Mihajla Pupina 1",
+        "city": "Novi Sad",
+        "postalCode": "21000",
+        "country": "Srbija"
+      },
+      "paymentMethod": "PayPal",
+      "itemsPrice": 1000,
+      "shippingPrice": 350,
+      "taxPrice": 200,
+      "totalPrice": 1550
+    }
+order: 1000

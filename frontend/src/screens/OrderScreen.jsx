@@ -23,7 +23,9 @@ const OrderScreen = () => {
       </Link>
 
       <div className='mb-4' style={{ borderLeft: '5px solid #ff4a4a', paddingLeft: '12px' }}>
-        <h2 className='fw-bold text-uppercase m-0' style={{ fontSize: '1.6rem' }}>Porudžbina #{order._id.substring(0, 12)}</h2>
+        <h2 className='fw-bold text-uppercase m-0' style={{ fontSize: '1.6rem' }}>
+          {order.orderItems?.some(item => item.isMembership) ? 'Članarina' : 'Porudžbina'} #{order._id.substring(0, 12)}
+        </h2>
         <small className='text-muted text-uppercase fw-bold'>Pregled statusa i realizacije transakcije</small>
       </div>
 
@@ -32,29 +34,32 @@ const OrderScreen = () => {
         <Col md={8}>
           <ListGroup variant='flush' className='shadow-sm rounded overflow-hidden'>
             
-            {/* Kod teretane */}
-            <ListGroup.Item className='bg-dark text-white p-3'>
-              <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1rem' }}>
-                <FaDumbbell className='me-2'/>Status Članstva
-              </h4>
-            </ListGroup.Item>
-            <ListGroup.Item className='p-3 bg-light text-dark'>
-              <p className='mb-2'><strong>Korišćeni Članski Kod:</strong> <span className='text-uppercase fw-bold text-danger'>{order.gymCode || 'Bez koda'}</span></p>
-              {order.isDelivered ? (
-                <Badge bg='success' className='p-2 fs-6 w-100 text-uppercase'><FaCheck className='me-1'/> Članstvo aktivirano / Oprema isporučena</Badge>
-              ) : (
-                <Badge bg='secondary' className='p-2 fs-6 w-100 text-uppercase'><FaTimes className='me-1'/> U obradi na recepciji</Badge>
-              )}
-            </ListGroup.Item>
+            {/* Za članarinu prikazuj aktivaciju */}
+            {order.orderItems?.some(item => item.isMembership) && (
+              <>
+                <ListGroup.Item className='bg-dark text-white p-3'>
+                  <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1rem' }}>
+                    <FaDumbbell className='me-2'/>Status Članarine
+                  </h4>
+                </ListGroup.Item>
+                <ListGroup.Item className='p-3 bg-light text-dark'>
+                  {order.isPaid ? (
+                    <Badge bg='success' className='p-2 fs-6 w-100 text-uppercase'><FaCheck className='me-1'/> Članarina Aktivirana</Badge>
+                  ) : (
+                    <Badge bg='danger' className='p-2 fs-6 w-100 text-uppercase'><FaTimes className='me-1'/> Čeka se potvrda plaćanja</Badge>
+                  )}
+                </ListGroup.Item>
+              </>
+            )}
 
             {/* Plaćanje */}
             <ListGroup.Item className='bg-dark text-white p-3 mt-3'>
               <h4 className='text-uppercase fw-bold m-0' style={{ color: '#ff4a4a', fontSize: '1rem' }}>Plaćanje</h4>
             </ListGroup.Item>
             <ListGroup.Item className='p-3 bg-light text-dark'>
-              <p className='mb-2'><strong>Metoda:</strong> {order.paymentMethod}</p>
+              <p className='mb-2'><strong>Metoda:</strong> {order.paymentMethod || 'Nije navedena'}</p>
               {order.isPaid ? (
-                <Badge bg='success' className='p-2 fs-6 w-100 text-uppercase'><FaCheck className='me-1'/> Plaćeno uspešno ({order.paidAt.substring(0, 10)})</Badge>
+                <Badge bg='success' className='p-2 fs-6 w-100 text-uppercase'><FaCheck className='me-1'/> Plaćeno uspešno ({order.paidAt ? order.paidAt.substring(0, 10) : 'Aktivirano'})</Badge>
               ) : (
                 <Badge bg='danger' className='p-2 fs-6 w-100 text-uppercase'><FaTimes className='me-1'/> Čeka se uplata (Donesite novac na recepciju)</Badge>
               )}

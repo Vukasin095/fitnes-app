@@ -21,12 +21,12 @@ const ShippingScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate('/gym-code'); // Vodi na korak 2 (Unos koda) koji smo napravili
+    navigate('/payment');
   };
 
   return (
     <FormContainer>
-      <CheckoutSteps step1 />
+      <CheckoutSteps step1 step2 step2Label='Dostava' step2Link='/shipping' />
       <Card className='p-4 shadow-lg border-0 bg-dark text-white rounded mt-3'>
         <Card.Body>
           <h3 className='text-uppercase fw-bold text-center mb-4' style={{ color: '#ff4a4a', letterSpacing: '1px' }}>
@@ -55,7 +55,7 @@ const ShippingScreen = () => {
             </Form.Group>
 
             <Button type='submit' className='w-100 fw-bold text-uppercase py-2 border-0' style={{ backgroundColor: '#ff4a4a' }}>
-              Nastavi na kod članstva →
+              Nastavi na plaćanje →
             </Button>
           </Form>
         </Card.Body>

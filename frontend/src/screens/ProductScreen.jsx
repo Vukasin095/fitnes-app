@@ -1,24 +1,38 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useGetProductDetailsQuery } from '../slices/productsApiSlice';
 import { addToCart } from '../slices/cartSlice';
+import { saveMembershipPackage, clearMembership } from '../slices/membershipSlice';
 import { FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { membershipPackage } = useSelector((state) => state.membership);
 
   const [qty, setQty] = useState(1);
 
   const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
 
+  const isMembershipProduct = product?.category === 'Članarine' || product?.isMembership;
+
   const addToCartHandler = () => {
+    if (isMembershipProduct) {
+      dispatch(saveMembershipPackage({ ...product, qty: 1, isMembership: true }));
+      navigate('/membership-cart');
+      return;
+    }
+
+    if (membershipPackage) {
+      dispatch(clearMembership());
+    }
+
     dispatch(addToCart({ ...product, qty }));
     navigate('/cart');
   };
@@ -74,7 +88,7 @@ const ProductScreen = () => {
                   )}
                 </div>
 
-                {product.countInStock > 0 && (
+                {!isMembershipProduct && product.countInStock > 0 && (
                   <div className='d-flex justify-content-between mb-4 small text-muted align-items-center'>
                     <span>Količina:</span>
                     <Form.Control
@@ -100,7 +114,7 @@ const ProductScreen = () => {
                   disabled={product.countInStock === 0}
                   onClick={addToCartHandler}
                 >
-                  <FaShoppingCart className='me-2' /> Dodaj u Korpu
+                  <FaShoppingCart className='me-2' /> {isMembershipProduct ? 'Odaberi Paket' : 'Dodaj u Korpu'}
                 </Button>
               </Card.Body>
             </Card>
