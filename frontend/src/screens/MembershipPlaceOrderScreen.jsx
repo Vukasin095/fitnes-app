@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import { useCreateOrderMutation } from '../slices/ordersApiSlice';
 import { useActivateMembershipMutation } from '../slices/usersApiSlice';
 import { clearMembership } from '../slices/membershipSlice';
+import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 
 const MembershipPlaceOrderScreen = () => {
@@ -67,8 +68,16 @@ const MembershipPlaceOrderScreen = () => {
 
       const res = await createOrder(orderData).unwrap();
 
-      await activateMembership().unwrap();
-      toast.success('Članarina aktivirana!');
+      // Try to activate membership, but don't block order navigation on failure
+      try {
+        const userRes = await activateMembership({ membershipPackage: membershipPackage.name }).unwrap();
+        dispatch(setCredentials({ ...userRes }));
+        toast.success('Članarina aktivirana!');
+      } catch (actErr) {
+        // Show detailed activation error but continue to order page
+        const msg = actErr?.data?.message || actErr?.error || JSON.stringify(actErr);
+        toast.error(`Članarina nije aktivirana: ${msg}`);
+      }
 
       dispatch(clearMembership());
       navigate(`/order/${res._id}`);

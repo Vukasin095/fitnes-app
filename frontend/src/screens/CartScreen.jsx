@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card, Container } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
 import { addToCart, removeFromCart } from '../slices/cartSlice';
+import { clearMembership } from '../slices/membershipSlice';
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -13,6 +14,13 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   const { userInfo } = useSelector((state) => state.auth);
+  const { membershipPackage } = useSelector((state) => state.membership);
+
+  useEffect(() => {
+    if (membershipPackage) {
+      dispatch(clearMembership());
+    }
+  }, [membershipPackage, dispatch]);
 
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));

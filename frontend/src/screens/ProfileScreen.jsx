@@ -159,6 +159,9 @@ const ProfileScreen = () => {
                 <FaDumbbell size={40} className='me-3' style={{ color: '#ff4a4a' }} />
                 <div>
                   <h4 className='fw-bold m-0 mb-2'>✓ Aktivna Članarina</h4>
+                  {userInfo?.membershipPackage && (
+                    <p className='m-0 mb-2'><strong>Paket:</strong> {userInfo.membershipPackage}</p>
+                  )}
                   <p className='m-0'><strong>Važi od:</strong> {membershipStartDate}</p>
                   <p className='m-0'><strong>Ističe:</strong> {membershipEndDate}</p>
                 </div>
@@ -217,7 +220,7 @@ const ProfileScreen = () => {
                               )}
                             </td>
                             <td className='align-middle'>{order?.totalPrice ? order.totalPrice.toLocaleString('sr-RS') : '0'} RSD</td>
-                            <td className='align-middle text-capitalize'>{order?.status || (order?.isPaid ? 'Plaćeno' : 'Obrada')}</td>
+                            <td className='align-middle text-capitalize'>{order?.isPaid ? 'Plaćeno' : order?.status || 'Obrada'}</td>
                             <td className='align-middle'>
                               {order?.isPaid ? (
                                 <span className='text-success'>✓ Da</span>

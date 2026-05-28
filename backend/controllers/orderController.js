@@ -12,6 +12,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
         throw new Error('Nema porudžbina');
     }
     else {
+        const isMembershipOrder = orderItems.some((x) => x.isMembership);
+
         const order = new Order({
             orderItems: orderItems.map((x) => ({
                 name: x.name,
@@ -19,7 +21,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
                 image: x.image,
                 price: x.price,
                 isMembership: x.isMembership || false,
-                product: x._id,
+                product: x.product || x._id || x.id || x.name,
             })),
             user: req.user._id,
             shippingAddress: shippingAddress || {},
@@ -28,7 +30,9 @@ const addOrderItems = asyncHandler(async (req, res) => {
             taxPrice,
             shippingPrice,
             totalPrice,
-            status: 'Processing',
+            status: isMembershipOrder ? 'Plaćeno' : 'Processing',
+            isPaid: isMembershipOrder,
+            paidAt: isMembershipOrder ? Date.now() : undefined,
         });
 
         const createdOrder = await order.save();

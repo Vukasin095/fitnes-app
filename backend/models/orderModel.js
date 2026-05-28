@@ -14,9 +14,8 @@ const orderSchema = new mongoose.Schema(
                 price: { type: Number, required: true },
                 isMembership: { type: Boolean, default: false },
                 product: {
-                    type: mongoose.Schema.Types.ObjectId,
+                    type: String,
                     required: true,
-                    ref: "Product",
                 },
             },
         ],

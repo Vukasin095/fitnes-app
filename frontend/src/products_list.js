@@ -1,3 +1,5 @@
+// Demo products list for the storefront — not directly related to gym membership pages.
+// Kept for shop demo purposes. If you want, I can move these to a separate demo file.
 const products = [
     {
         _id: '1',

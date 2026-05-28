@@ -13,6 +13,8 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
 
+    const membershipActive = user.membershipExpires && user.membershipExpires > Date.now();
+
     res.json({
       _id: user._id,
       name: user.name,
@@ -20,7 +22,8 @@ const authUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       isGymMember: user.isGymMember,
       gymCode: user.gymCode,
-      membershipActive: user.membershipActive,
+      membershipActive,
+      membershipPackage: user.membershipPackage,
       membershipStart: user.membershipStart,
       membershipExpires: user.membershipExpires,
     });
@@ -67,6 +70,7 @@ const registerUser = asyncHandler(async (req, res) => {
       isGymMember: user.isGymMember,
       gymCode: user.gymCode,
       membershipActive: user.membershipActive,
+      membershipPackage: user.membershipPackage,
       membershipStart: user.membershipStart,
       membershipExpires: user.membershipExpires,
     });
@@ -102,7 +106,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
             isAdmin: user.isAdmin,
             isGymMember: user.isGymMember,
             gymCode: user.gymCode,
-            membershipActive: user.membershipActive,
+            membershipActive: membershipActive,
+            membershipPackage: user.membershipPackage,
             membershipStart: user.membershipStart,
             membershipExpires: user.membershipExpires,
         });
@@ -149,6 +154,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       isGymMember: updatedUser.isGymMember,
       gymCode: updatedUser.gymCode,
       membershipActive: membershipActive,
+      membershipPackage: updatedUser.membershipPackage,
       membershipStart: updatedUser.membershipStart,
       membershipExpires: updatedUser.membershipExpires,
     });
@@ -166,7 +172,13 @@ const activateMembership = asyncHandler(async (req, res) => {
 
   if (user) {
     const now = new Date();
-    
+
+    // Ako već ima aktivnu članarinu, odbijamo opet
+    if (user.membershipExpires && user.membershipExpires > now) {
+      res.status(400);
+      throw new Error('Već imate aktivnu članarinu');
+    }
+
     // Ako korisnik nije već registrovani član, postavimo ga sada
     if (!user.isGymMember) {
       user.isGymMember = true;
@@ -174,6 +186,7 @@ const activateMembership = asyncHandler(async (req, res) => {
     }
 
     user.membershipActive = true;
+    user.membershipPackage = req.body.membershipPackage || user.membershipPackage || 'Članarina';
     user.membershipStart = now;
     user.membershipExpires = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
@@ -187,6 +200,7 @@ const activateMembership = asyncHandler(async (req, res) => {
       isGymMember: updatedUser.isGymMember,
       gymCode: updatedUser.gymCode,
       membershipActive: updatedUser.membershipActive,
+      membershipPackage: updatedUser.membershipPackage,
       membershipStart: updatedUser.membershipStart,
       membershipExpires: updatedUser.membershipExpires,
     });

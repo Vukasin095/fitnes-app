@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    membershipPackage: {
+      type: String,
+      default: '',
+    },
     membershipStart: {
       type: Date,
       default: null,

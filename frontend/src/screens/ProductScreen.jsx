@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,12 @@ const ProductScreen = () => {
   const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
 
   const isMembershipProduct = product?.category === 'Članarine' || product?.isMembership;
+
+  useEffect(() => {
+    if (!isMembershipProduct && membershipPackage) {
+      dispatch(clearMembership());
+    }
+  }, [isMembershipProduct, membershipPackage, dispatch]);
 
   const addToCartHandler = () => {
     if (isMembershipProduct) {

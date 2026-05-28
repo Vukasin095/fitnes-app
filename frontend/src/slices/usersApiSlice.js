@@ -20,9 +20,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     activateMembership: builder.mutation({
-      query: () => ({
+      query: (body) => ({
         url: '/api/users/membership/activate',
         method: 'POST',
+        body,
       }),
     }),
   }),

@@ -8,7 +8,7 @@ const users = [
     isAdmin: true,
     isGymMember: true,
     gymCode: 'FITNES2026',
-    membershipExpires: new Date('2026-12-31'),
+    membershipExpires: null,
   },
   {
     name: 'Vukašin Član',
@@ -17,7 +17,7 @@ const users = [
     isAdmin: false,
     isGymMember: true,
     gymCode: 'FITNES2026',
-    membershipExpires: new Date('2026-07-26'), // Članarina važi
+    membershipExpires: null, // reset for testing purchases
   },
   {
     name: 'Petar Običan',
