@@ -1,6 +1,0 @@
-$kind: http-request
-url: "{{baseUrl}}/users/membership/activate"
-method: POST
-headers:
-  Authorization: Bearer {{token}}
-order: 3000

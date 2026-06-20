@@ -1,17 +1,17 @@
 {
-  "name": "fitnes-app",
+  "name": "veb_skriptarnica",
   "version": "1.0.0",
-  "description": "fitnes eCommerce application MERN stack",
-  "homepage": "https://github.com/Vukasin095/fitnes-app#readme",
+  "description": "FTN Skriptarnica eCommerce application MERN stack",
+  "homepage": "https://github.com/MasaSaranovic/veb_skriptarnica#readme",
   "bugs": {
-    "url": "https://github.com/Vukasin095/fitnes-app/issues"
+    "url": "https://github.com/MasaSaranovic/veb_skriptarnica/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vukasin095/fitnes-app.git"
+    "url": "git+https://github.com/MasaSaranovic/veb_skriptarnica.git"
   },
   "license": "MIT",
-  "author": "Vukasin Petkovic",
+  "author": "Masa Saranovic",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -29,7 +29,8 @@
     "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.1"
+    "mongoose": "^9.6.1",
+    "multer": "^2.1.1"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

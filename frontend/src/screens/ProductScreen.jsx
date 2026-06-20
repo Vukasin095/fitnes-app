@@ -1,134 +1,158 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import Rating from '../components/Rating';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import { useGetProductDetailsQuery } from '../slices/productsApiSlice';
-import { addToCart } from '../slices/cartSlice';
-import { saveMembershipPackage, clearMembership } from '../slices/membershipSlice';
-import { FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
-
+import { useState } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { Form, Row, Col, Image, Card, Button, Badge } from 'react-bootstrap'
+import Rating from '../components/Rating'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
+import {
+    useGetProductDetailsQuery,
+    useAddProductReviewMutation,
+} from '../slices/productsApiSlice'
+import { addToCart } from '../slices/cartSlice'
+import { useDispatch, useSelector } from 'react-redux'
 const ProductScreen = () => {
-  const { id: productId } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { membershipPackage } = useSelector((state) => state.membership);
+    const { id: productId } = useParams();
+    const [qty, setQty] = useState(1);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { data: product, isLoading, error } =
+        useGetProductDetailsQuery(productId);
+    const [selectedRating, setSelectedRating] = useState(0);
+    const [reviewError, setReviewError] = useState('');
+    const [addProductReview] = useAddProductReviewMutation();
+    const userLogin = useSelector((state) => state.auth);
+    const { userInfo } = userLogin;
 
-  const [qty, setQty] = useState(1);
-
-  const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
-
-  const isMembershipProduct = product?.category === 'Članarine' || product?.isMembership;
-
-  useEffect(() => {
-    if (!isMembershipProduct && membershipPackage) {
-      dispatch(clearMembership());
-    }
-  }, [isMembershipProduct, membershipPackage, dispatch]);
-
-  const addToCartHandler = () => {
-    if (isMembershipProduct) {
-      dispatch(saveMembershipPackage({ ...product, qty: 1, isMembership: true }));
-      navigate('/membership-cart');
-      return;
+    const addToCartHandler = () => {
+        dispatch(addToCart({ ...product, qty }));
+        navigate('/cart');
     }
 
-    if (membershipPackage) {
-      dispatch(clearMembership());
-    }
+    const handleRatingClick = async (value) => {
+        if (!userInfo) {
+            navigate('/login?redirect=/product/' + productId);
+            return;
+        }
 
-    dispatch(addToCart({ ...product, qty }));
-    navigate('/cart');
-  };
+        try {
+            setReviewError('');
+            await addProductReview({ productId, rating: value }).unwrap();
+            setSelectedRating(value);
+        } catch (err) {
+            setReviewError(err?.data?.message || err?.error || 'Greška pri ocenjivanju');
+        }
+    };
 
-  return (
-    <Container className='my-4'>
-      <Link className='btn btn-outline-dark my-3 fw-bold text-uppercase' to='/'>
-        <FaArrowLeft className='me-1' /> Nazad u Šop
-      </Link>
+    const ratingValue = selectedRating || product?.rating || 0;
 
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error?.data?.message || error.error}</Message>
-      ) : (
-        <Row className='mt-3'>
-          <Col md={5} className='mb-4'>
-            <Image src={product.image} alt={product.name} fluid rounded className='shadow-sm' style={{ borderTop: '4px solid #ff4a4a', width: '100%', maxHeight: '450px', objectFit: 'cover' }} />
-          </Col>
-          
-          <Col md={4} className='mb-4'>
-            <ListGroup variant='flush' className='shadow-sm rounded overflow-hidden'>
-              <ListGroup.Item className='bg-dark text-white p-3'>
-                <span className='text-uppercase small fw-bold' style={{ color: '#ff4a4a' }}>{product.category}</span>
-                <h3 className='fw-bold text-uppercase m-0 mt-1'>{product.name}</h3>
-              </ListGroup.Item>
-              <ListGroup.Item className='p-3 bg-light text-dark'>
-                <Rating value={product.rating} text={`${product.numReviews}`} />
-              </ListGroup.Item>
-              <ListGroup.Item className='p-3 bg-light text-dark'>
-                <strong>Brend:</strong> {product.brand}
-              </ListGroup.Item>
-              <ListGroup.Item className='p-3 bg-light text-dark' style={{ lineHeight: '1.6' }}>
-                <strong>Opis:</strong> {product.description}
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-
-          <Col md={3}>
-            <Card className='border-0 shadow-lg text-white rounded overflow-hidden' style={{ backgroundColor: '#1e1e1e' }}>
-              <Card.Body className='p-4'>
-                <div className='d-flex justify-content-between mb-3 small text-muted'>
-                  <span>Cena:</span>
-                  <span className='text-white fw-bold fs-4' style={{ color: '#ff4a4a !important' }}>{product.price?.toLocaleString('sr-RS')} RSD</span>
-                </div>
-                
-                <div className='d-flex justify-content-between mb-3 small text-muted align-items-center'>
-                  <span>Status zaliha:</span>
-                  {product.countInStock > 0 ? (
-                    <span className='badge bg-success text-uppercase p-2'>Na stanju</span>
-                  ) : (
-                    <span className='badge bg-danger text-uppercase p-2'>Rasprodato</span>
-                  )}
-                </div>
-
-                {!isMembershipProduct && product.countInStock > 0 && (
-                  <div className='d-flex justify-content-between mb-4 small text-muted align-items-center'>
-                    <span>Količina:</span>
-                    <Form.Control
-                      as='select'
-                      value={qty}
-                      style={{ width: '70px' }}
-                      className='bg-light fw-bold py-1'
-                      onChange={(e) => setQty(Number(e.target.value))}
-                    >
-                      {[...Array(product.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </div>
-                )}
-
-                <Button
-                  className='w-100 fw-bold text-uppercase py-3 border-0 text-white shadow-sm d-flex align-items-center justify-content-center'
-                  style={{ backgroundColor: '#ff4a4a', letterSpacing: '1px' }}
-                  type='button'
-                  disabled={product.countInStock === 0}
-                  onClick={addToCartHandler}
-                >
-                  <FaShoppingCart className='me-2' /> {isMembershipProduct ? 'Odaberi Paket' : 'Dodaj u Korpu'}
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      )}
-    </Container>
-  );
-};
-
-export default ProductScreen;
+    return (<>
+        <Link className='btn btn-outline-secondary mb-4' to='/'>
+            ← Nazad
+        </Link>
+        {isLoading ? (
+            <Loader />
+        ) : error ? (
+            <Message variant="danger">
+                {error?.data?.message || error.error}
+            </Message>
+        ) : (
+            <><Card className='border-0 shadow-sm p-4 mb-4'>
+                <Row className='align-items-center'>
+                    <Col md={8}>
+                        <h2 className='mb-2'>{product.name}</h2>
+                        <div className='d-flex align-items-center flex-wrap gap-2'>
+                            <Rating
+                                value={ratingValue}
+                                text={`${product.numReviews} recenzija`}
+                                interactive={!!userInfo}
+                                onRate={handleRatingClick}
+                                userRating={selectedRating}
+                            />
+                            {reviewError && (
+                                <div className='text-danger small'>{reviewError}</div>
+                            )}
+                        </div>
+                    </Col>
+                    <Col md={4} className='text-md-end mt-3 mt-md-0'>
+                        <h3 className='text-primary mb-0'>
+                            {product?.price?.toFixed(2)} RSD
+                        </h3>
+                    </Col>
+                </Row>
+            </Card><Row className='gy-4'>
+                    <Col lg={8}>
+                        <Card className='border-0 shadow-sm p-4'>
+                            <div className='text-center'>
+                                <Image
+                                    src={product.image}
+                                    alt={product.name}
+                                    fluid
+                                    style={{
+                                        maxHeight: '500px', objectFit:
+                                            'contain'
+                                    }} />
+                            </div>
+                        </Card>
+                    </Col>
+                    <Col lg={4}>
+                        <Card className='border-0 shadow-sm'>
+                            <Card.Body>
+                                <h4 className='mb-4'>Informacije o proizvodu</h4>
+                                <div className='d-flex justify-content-between mb-3'>
+                                    <span>Kategorija:</span>
+                                    {product.category}
+                                </div>
+                                <div className='d-flex justify-content-between align-items-center mb-4'>
+                                    <span>Status:</span>
+                                    {product.countInStock > 0 ? (
+                                        <Badge bg='success'>Dostupno</Badge>
+                                    ) : (
+                                        <Badge bg='danger'>Nije dostupno</Badge>
+                                    )}
+                                </div>
+                                {product.countInStock > 0 && (
+                                    <div className='d-flex justify-content-between align-items-center mb-4'>
+                                        <span>Količina:</span>
+                                        <Form.Control
+                                            as='select'
+                                            value={qty}
+                                            onChange={(e) =>
+                                                setQty(Number(e.target.value))}
+                                            style={{
+                                                width: '90px', textAlign:
+                                                    'center'
+                                            }}
+                                        >
+                                            {[...Array(product.countInStock).keys
+                                                ()].map((x) => (
+                                                    <option key={x + 1} value={x +
+                                                        1}>
+                                                        {x + 1}
+                                                    </option>
+                                                ))}
+                                        </Form.Control>
+                                    </div>
+                                )}
+                                <div className='d-grid'>
+                                    <Button
+                                        className='add-to-cart-btn'
+                                        type='button'
+                                        disabled={product.countInStock === 0}
+                                        onClick={addToCartHandler}
+                                    >
+                                        Dodaj u korpu
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row><Card className='border-0 shadow-sm mt-4'>
+                    <Card.Body>
+                        <h4 className='mb-3'>Opis proizvoda</h4>
+                        <p className='text-muted mb-0'>{product.description}</p>
+                    </Card.Body>
+                </Card></>
+        )}
+    </>)
+}
+export default ProductScreen

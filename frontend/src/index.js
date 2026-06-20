@@ -6,6 +6,7 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Provider } from 'react-redux';
 import store from './store';
 //import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +15,7 @@ import './assets/styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import PrivateRoute from './components/PrivateRoute';
+import AdminRoute from './components/AdminRoute';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
@@ -22,15 +24,15 @@ import RegisterScreen from './screens/RegisterScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
-import GymMembershipScreen from './screens/GymMembershipScreen';
-import MembershipProductScreen from './screens/MembershipProductScreen';
-import MembershipCheckoutScreen from './screens/MembershipCheckoutScreen';
-import MembershipCartScreen from './screens/MembershipCartScreen';
-import MembershipPaymentScreen from './screens/MembershipPaymentScreen';
-import MembershipPlaceOrderScreen from './screens/MembershipPlaceOrderScreen';
-import GymCodeScreen from './screens/GymCodeScreen';
 import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import MembershipsScreen from './screens/MembershipsScreen';
+import OrderListScreen from './screens/admin/OrderListScreen';
+import ProductListScreen from './screens/admin/ProductListScreen';
+import ProductEditScreen from './screens/admin/ProductEditScreen';
+import UserEditScreen from './screens/admin/UserEditScreen';
+import UserCreateScreen from './screens/admin/UserCreateScreen';
+import UserListScreen from './screens/admin/UserListScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,19 +42,23 @@ const router = createBrowserRouter(
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
-    <Route path='/gym-membership' element={<GymMembershipScreen />} />
-    <Route path='/membership/:id' element={<MembershipProductScreen />} />
+      <Route path='/memberships' element={<MembershipsScreen />} />
+
       <Route path='' element={<PrivateRoute />} >
-        <Route path='/membership-cart' element={<MembershipCartScreen />} />
-        <Route path='/membership-payment' element={<MembershipPaymentScreen />} />
-        <Route path='/membership-checkout' element={<MembershipCheckoutScreen />} />
-        <Route path='/membership-placeorder' element={<MembershipPlaceOrderScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/placeorder' element={<PlaceOrderScreen />} />
-        <Route path='/gym-code' element={<GymCodeScreen />} />
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='/profile' element={<ProfileScreen />} />
+      </Route>
+
+      <Route path='' element={<AdminRoute />} >
+        <Route path='/admin/orderlist' element={<OrderListScreen />} />
+        <Route path='/admin/productlist' element={<ProductListScreen />} />
+        <Route path='/admin/userlist' element={<UserListScreen />} />
+        <Route path='/admin/user/create' element={<UserCreateScreen />} />
+        <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+        <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
       </Route>
     </Route>
   )
@@ -62,7 +68,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PayPalScriptProvider deferLoading={true}>
+        <RouterProvider router={router} />
+      </PayPalScriptProvider>
     </Provider>
   </React.StrictMode>
 );

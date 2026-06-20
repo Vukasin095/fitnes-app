@@ -3,20 +3,17 @@ import mongoose from "mongoose";
 const reviewSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'User'
     },
     name: {
-        type: String,
-        required: true
+        type: String
     },
     rating: {
         type: Number,
         required: true
     },
     comment: {
-        type: String,
-        required: true
+        type: String
     }
 }, {
     timestamps: true
@@ -39,6 +36,10 @@ const productSchema = mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    brand: {
+        type: String,
+        default: ''
     },
     category: {
         type: String,

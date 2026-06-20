@@ -12,18 +12,19 @@ const orderSchema = new mongoose.Schema(
                 qty: { type: Number, required: true },
                 image: { type: String, required: true },
                 price: { type: Number, required: true },
-                isMembership: { type: Boolean, default: false },
+                category: { type: String, required: true },
                 product: {
-                    type: String,
+                    type: mongoose.Schema.Types.ObjectId,
                     required: true,
+                    ref: "Product",
                 },
             },
         ],
         shippingAddress: {
-            address: { type: String },
-            city: { type: String },
-            postalCode: { type: String },
-            country: { type: String },
+            address: { type: String, required: true },
+            city: { type: String, required: true },
+            postalCode: { type: String, required: true },
+            country: { type: String, required: true },
         },
         paymentMethod: {
             type: String,
@@ -55,11 +56,6 @@ const orderSchema = new mongoose.Schema(
             required: true,
             default: 0.0,
         },
-        status: {
-            type: String,
-            required: true,
-            default: 'Processing',
-        },
         isPaid: {
             type: Boolean,
             required: true,
@@ -74,6 +70,12 @@ const orderSchema = new mongoose.Schema(
             default: false,
         },
         deliveredAt: {
+            type: Date,
+        },
+        membershipStartDate: {
+            type: Date,
+        },
+        membershipEndDate: {
             type: Date,
         },
     }, { timestamps: true });

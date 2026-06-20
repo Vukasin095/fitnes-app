@@ -1,5 +1,0 @@
-$kind: collection
-description: Postman kolekcija za backend rute fitnes aplikacije
-variables:
-  baseUrl: http://localhost:5000/api
-  token: ""

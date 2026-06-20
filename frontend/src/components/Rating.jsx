@@ -1,27 +1,38 @@
-import React from 'react';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'
 
-const Rating = ({ value, text }) => {
-  return (
-    <div className='rating d-flex align-items-center' style={{ color: '#ffc107' }}>
-      <span className='me-1'>
-        {value >= 1 ? <FaStar /> : value >= 0.5 ? <FaStarHalfAlt /> : <FaRegStar />}
-      </span>
-      <span className='me-1'>
-        {value >= 2 ? <FaStar /> : value >= 1.5 ? <FaStarHalfAlt /> : <FaRegStar />}
-      </span>
-      <span className='me-1'>
-        {value >= 3 ? <FaStar /> : value >= 2.5 ? <FaStarHalfAlt /> : <FaRegStar />}
-      </span>
-      <span className='me-1'>
-        {value >= 4 ? <FaStar /> : value >= 3.5 ? <FaStarHalfAlt /> : <FaRegStar />}
-      </span>
-      <span className='me-1'>
-        {value >= 5 ? <FaStar /> : value >= 4.5 ? <FaStarHalfAlt /> : <FaRegStar />}
-      </span>
-      {text && <span className='rating-text small text-muted ms-2 fw-normal'>({text} recenzija)</span>}
-    </div>
-  );
-};
+const Rating = ({ value, text, interactive, onRate, userRating }) => {
+    const renderStar = (starValue) => {
+        if (value >= starValue) return <FaStar />
+        if (value >= starValue - 0.5) return <FaStarHalfAlt />
+        return <FaRegStar />
+    }
 
-export default Rating;
+    const starClasses = (starValue) =>
+        `rating-star ${interactive ? 'rating-star-clickable' : ''} ${
+            userRating >= starValue ? 'rating-star-selected' : ''
+        }`
+
+    return (
+        <div className='rating'>
+            {[1, 2, 3, 4, 5].map((starValue) => (
+                <span
+                    key={starValue}
+                    className={starClasses(starValue)}
+                    onClick={() => interactive && onRate?.(starValue)}
+                    role={interactive ? 'button' : undefined}
+                    tabIndex={interactive ? 0 : undefined}
+                    onKeyDown={(e) => {
+                        if (interactive && (e.key === 'Enter' || e.key === ' ')) {
+                            onRate?.(starValue)
+                        }
+                    }}
+                >
+                    {renderStar(starValue)}
+                </span>
+            ))}
+            <span className="rating-text">{text && text}</span>
+        </div>
+    )
+}
+
+export default Rating

@@ -1,76 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Col, Card, Container } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Form, Button, Col, Alert } from 'react-bootstrap';
+import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../slices/cartSlice';
 
-// PayPal API ključ - zameni sa pravim ključem
-// eslint-disable-next-line no-unused-vars
-const PAYPAL_API_KEY = process.env.REACT_APP_PAYPAL_CLIENT_ID || 'YOUR_PAYPAL_CLIENT_ID_HERE';
-
 const PaymentScreen = () => {
-  const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart);
+    const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
-  const [paymentMethod, setPaymentMethod] = useState('PayPal');
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (cart.cartItems.length === 0) {
-      navigate('/cart');
-      return;
-    }
+    const cart = useSelector((state) => state.cart);
+    const { shippingAddress } = cart;
+    const showGymPaymentOption = shippingAddress?.pickupAtGym === true;
 
-    if (!cart.shippingAddress) {
-      navigate('/shipping');
-    }
-  }, [cart.cartItems.length, cart.shippingAddress, navigate]);
+    useEffect(() => {
+        if (!shippingAddress?.address) {
+            navigate('/shipping');
+            return;
+        }
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(savePaymentMethod(paymentMethod));
-    navigate('/placeorder');
-  };
+        if (showGymPaymentOption) {
+            setPaymentMethod('U teretani');
+        }
+    }, [shippingAddress, navigate, showGymPaymentOption]);
 
-  return (
-    <Container className='my-4'>
-      <CheckoutSteps step1 step2 step3 step2Label='Dostava' step2Link='/shipping' />
+    const submitHandler = (e) => {
+        e.preventDefault();
+        dispatch(savePaymentMethod(paymentMethod));
+        navigate('/placeorder');
+    };
 
-      <div className='d-flex justify-content-center align-items-center mt-4'>
-        <Card className='p-4 shadow-lg border-0 bg-dark text-white rounded' style={{ width: '100%', maxWidth: '450px' }}>
-          <Card.Body>
-            <h3 className='text-uppercase fw-bold text-center mb-3' style={{ color: '#ff4a4a', letterSpacing: '1px' }}>
-              Način Plaćanja
-            </h3>
-            <p className='text-center text-muted small mb-4'>Odaberite opciju za realizaciju Vaše online uplate.</p>
-
+    return (
+        <FormContainer>
+            <CheckoutSteps step1 step2 step3 />
+            <h1>Način plaćanja</h1>
             <Form onSubmit={submitHandler}>
-              <Form.Group className='mb-4 text-start bg-secondary p-3 rounded'>
-                <Form.Label as='legend' className='fw-bold text-warning small text-uppercase mb-2'>Dostupne Metode</Form.Label>
-                <Col>
-                  <Form.Check
-                    type='radio'
-                    label='Online Kartica / PayPal'
-                    id='PayPal'
-                    name='paymentMethod'
-                    value='PayPal'
-                    checked
-                    className='fw-bold my-2 fs-5'
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  ></Form.Check>
-                </Col>
-              </Form.Group>
+                <Form.Group>
+                    <Form.Label as='legend'>Odaberite način plaćanja</Form.Label>
+                    <Col>
+                        {!showGymPaymentOption && (
+                            <Form.Check
+                                type='radio'
+                                className='my-2'
+                                label='PayPal ili Kreditna kartica'
+                                id='PayPal'
+                                name='paymentMethod'
+                                value='PayPal'
+                                checked={paymentMethod === 'PayPal'}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                            />
+                        )}
 
-              <Button type='submit' className='w-100 fw-bold text-uppercase py-2 border-0' style={{ backgroundColor: '#ff4a4a' }}>
-                Dalje na Pregled →
-              </Button>
+                        {showGymPaymentOption && (
+                            <Alert variant='info' className='my-2 mb-0'>
+                                Preuzimanje u teretani je aktivirano. Online plaćanje je
+                                onemogućeno i metoda plaćanja je zaključana na recepciju.
+                            </Alert>
+                        )}
+
+                    </Col>
+                </Form.Group>
+                <Button type='submit' variant='primary'>
+                    {showGymPaymentOption
+                        ? 'Potvrdi porudžbinu (Plaćanje na recepciji)'
+                        : 'Nastavite'}
+                </Button>
             </Form>
-          </Card.Body>
-        </Card>
-      </div>
-    </Container>
-  );
+        </FormContainer>
+    );
 };
 
 export default PaymentScreen;

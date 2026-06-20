@@ -1,67 +1,135 @@
-import React, { useState } from 'react';
-import { Form, Button, Card } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
-import CheckoutSteps from '../components/CheckoutSteps';
 import { saveShippingAddress } from '../slices/cartSlice';
+import CheckoutSteps from '../components/CheckoutSteps';
+
+const GYM_ADDRESS = {
+    address: 'Teretana HQ',
+    city: 'Novi Sad',
+    postalCode: '21000',
+    country: 'Srbija',
+};
 
 const ShippingScreen = () => {
-  const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
+    const cart = useSelector((state) => state.cart);
+    const { userInfo } = useSelector((state) => state.auth);
+    const { cartItems } = cart;
 
-  const [address, setAddress] = useState(shippingAddress?.address || '');
-  const [city, setCity] = useState(shippingAddress?.city || '');
-  const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode || '');
-  const [country, setCountry] = useState(shippingAddress?.country || '');
+    const hasMembership = cartItems.some((item) => item.category === 'Članarine');
+    const hasRegularProducts = cartItems.some((item) => item.category !== 'Članarine');
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const [pickupAtGym, setPickupAtGym] = useState(
+        cart.shippingAddress?.pickupAtGym || false
+    );
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate('/payment');
-  };
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [country, setCountry] = useState('');
 
-  return (
-    <FormContainer>
-      <CheckoutSteps step1 step2 step2Label='Dostava' step2Link='/shipping' />
-      <Card className='p-4 shadow-lg border-0 bg-dark text-white rounded mt-3'>
-        <Card.Body>
-          <h3 className='text-uppercase fw-bold text-center mb-4' style={{ color: '#ff4a4a', letterSpacing: '1px' }}>
-            Dostava Suplemenata
-          </h3>
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-          <Form onSubmit={submitHandler}>
-            <Form.Group className='mb-2' controlId='address'>
-              <Form.Label className='small'>Adresa i broj stanovanja</Form.Label>
-              <Form.Control type='text' placeholder='Unesite adresu' value={address} required className='bg-light border-0 py-2' onChange={(e) => setAddress(e.target.value)} />
-            </Form.Group>
+    useEffect(() => {
+        if (hasMembership) {
+            setAddress('Online / Aktivacija');
+            setCity('Online / Aktivacija');
+            setPostalCode('Online / Aktivacija');
+            setCountry('Online / Aktivacija');
+            setPickupAtGym(false);
+            return;
+        }
 
-            <Form.Group className='mb-2' controlId='city'>
-              <Form.Label className='small'>Grad</Form.Label>
-              <Form.Control type='text' placeholder='Unesite grad' value={city} required className='bg-light border-0 py-2' onChange={(e) => setCity(e.target.value)} />
-            </Form.Group>
+        if (pickupAtGym && userInfo?.isMember && hasRegularProducts) {
+            setAddress(GYM_ADDRESS.address);
+            setCity(GYM_ADDRESS.city);
+            setPostalCode(GYM_ADDRESS.postalCode);
+            setCountry(GYM_ADDRESS.country);
+        } else {
+            setAddress('');
+            setCity('');
+            setPostalCode('');
+            setCountry('');
+        }
+    }, [hasMembership, pickupAtGym, userInfo, hasRegularProducts]);
 
-            <Form.Group className='mb-2' controlId='postalCode'>
-              <Form.Label className='small'>Poštanski broj</Form.Label>
-              <Form.Control type='text' placeholder='Unesite poštanski broj' value={postalCode} required className='bg-light border-0 py-2' onChange={(e) => setPostalCode(e.target.value)} />
-            </Form.Group>
+    const submitHandler = (e) => {
+        e.preventDefault();
+        dispatch(saveShippingAddress({ address, city, postalCode, country, pickupAtGym }));
+        navigate('/payment');
+    };
 
-            <Form.Group className='mb-4' controlId='country'>
-              <Form.Label className='small'>Država</Form.Label>
-              <Form.Control type='text' placeholder='Unesite državu' value={country} required className='bg-light border-0 py-2' onChange={(e) => setCountry(e.target.value)} />
-            </Form.Group>
+    return (
+        <FormContainer>
+            <CheckoutSteps step1 step2 />
+            <h1>Podaci o dostavi</h1>
 
-            <Button type='submit' className='w-100 fw-bold text-uppercase py-2 border-0' style={{ backgroundColor: '#ff4a4a' }}>
-              Nastavi na plaćanje →
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-    </FormContainer>
-  );
+            <Form onSubmit={submitHandler}>
+                {!hasMembership && userInfo?.isMember && hasRegularProducts && (
+                    <Form.Group className='my-3' controlId='pickupAtGym'>
+                        <Form.Check
+                            type='checkbox'
+                            label='Preuzmi lično u teretani'
+                            checked={pickupAtGym}
+                            onChange={(e) => setPickupAtGym(e.target.checked)}
+                        />
+                    </Form.Group>
+                )}
+
+                <Form.Group controlId='address' className='my-2'>
+                    <Form.Label>Adresa</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Unesite adresu'
+                        value={address}
+                        required
+                        disabled={hasMembership || pickupAtGym}
+                        onChange={(e) => setAddress(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='city' className='my-2'>
+                    <Form.Label>Grad</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Unesite grad'
+                        value={city}
+                        required
+                        disabled={hasMembership || pickupAtGym}
+                        onChange={(e) => setCity(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='postalCode' className='my-2'>
+                    <Form.Label>Poštanski broj</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Unesite poštanski broj'
+                        value={postalCode}
+                        required
+                        disabled={hasMembership || pickupAtGym}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='country' className='my-2'>
+                    <Form.Label>Država</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Unesite državu'
+                        value={country}
+                        required
+                        disabled={hasMembership || pickupAtGym}
+                        onChange={(e) => setCountry(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+
+                <Button type='submit' variant='primary' className='my-2'>
+                    Nastavi
+                </Button>
+            </Form>
+        </FormContainer>
+    );
 };
 
 export default ShippingScreen;
