@@ -58,26 +58,22 @@ const OrderScreen = () => {
         }
     }, [order]);
 
+    const PAYPAL_CURRENCY = 'USD';
+
     useEffect(() => {
-        if (!errorPayPal && !loadingPayPal && paypal?.clientId) {
+        if (!errorPayPal && !loadingPayPal && paypal?.clientId && order && !order.isPaid && order.paymentMethod !== 'U teretani') {
             const loadPaypalScript = async () => {
                 paypalDispatch({
                     type: 'resetOptions',
                     value: {
                         'client-id': paypal.clientId,
-                        currency: 'EUR',
+                        currency: PAYPAL_CURRENCY,
                     },
                 });
                 paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
             };
 
-            if (order && !order.isPaid && order.paymentMethod !== 'U teretani') {
-                if (!window.paypal) {
-                    loadPaypalScript();
-                } else {
-                    paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-                }
-            }
+            loadPaypalScript();
         }
     }, [errorPayPal, loadingPayPal, paypal, order, paypalDispatch]);
 
@@ -365,15 +361,15 @@ const OrderScreen = () => {
                         <div className='order-status-note'>ℹ️ Status: {order.isPaid ? '✓ Plaćeno' : '⏳ Čeka se plaćanje'}</div>
                     </Card>
 
-                    {/* Discreet Test Button at Bottom (Admin Only) */}
-                    {userInfo && userInfo.isAdmin && !order.isPaid && order.paymentMethod !== 'U teretani' && (
+                    {/* Discreet Test Button at Bottom */}
+                    {!order.isPaid && order.paymentMethod !== 'U teretani' && (
                         <div className='admin-test-button-wrap'>
                             <Button
                                 onClick={onApproveTest}
                                 variant='outline-secondary'
                                 size='sm'
                                 className='admin-test-button'
-                                title='Test payment (admin only)'
+                                title='Test payment'
                             >
                                 🔧
                             </Button>

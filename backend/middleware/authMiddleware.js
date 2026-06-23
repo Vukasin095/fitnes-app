@@ -5,7 +5,13 @@ import User from '../models/userModel.js';
 const protect = asyncHandler(async (req, res, next) => {
     let token;
     // Read the JWT token from the cookie
-    token = req.cookies.jwt;
+    // First try cookie
+    token = req.cookies?.jwt;
+    // Fallback to Authorization header Bearer token (useful for SPA or when cookies are blocked)
+    if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -17,8 +23,7 @@ const protect = asyncHandler(async (req, res, next) => {
             res.status(401);
             throw new Error('Not authorized, token failed');
         }
-    }
-    else {
+    } else {
         res.status(401);
         throw new Error('Not authorized, no token');
     }

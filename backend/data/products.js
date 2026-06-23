@@ -1,4 +1,4 @@
-const products = [
+﻿const products = [
   // --- KATEGORIJA: SUPLEMENTI ---
   {
     name: 'Whey Gold Standard',
@@ -98,6 +98,18 @@ const products = [
     numReviews: 4,
     reviews: [ { rating: 5 }, { rating: 5 }, { rating: 4 }, { rating: 5 } ]
   },
+  {
+    name: 'Vitamin D3 + K2',
+    image: 'https://images.unsplash.com/photo-1545050004-16bca9d98c97?q=80&w=1170&auto=format&fit=crop',
+    description: 'Vitamin D3 uz K2 za podršku kostiju i imuniteta, naročito tokom zimske sezone.',
+    brand: "Nature's Way",
+    category: 'Zdravlje',
+    price: 2200,
+    countInStock: 16,
+    rating: 4.6,
+    numReviews: 3,
+    reviews: [ { rating: 5 }, { rating: 5 }, { rating: 4 } ]
+  },
 
   // --- KATEGORIJA: OPREMA ---
   {
@@ -136,8 +148,20 @@ const products = [
     numReviews: 3,
     reviews: [ { rating: 5 }, { rating: 4 }, { rating: 5 } ]
   },
+  {
+    name: 'Premium Sports Towel',
+    image: 'https://images.unsplash.com/photo-1541544180110-5c7b0b9ba752?q=80&w=1170&auto=format&fit=crop',
+    description: 'Meka i upijajuća sportska peškira sa anti-bakterijskom zaštitom, idealna za teretanu.',
+    brand: 'GymSoft',
+    category: 'Oprema',
+    price: 2300,
+    countInStock: 24,
+    rating: 4.9,
+    numReviews: 6,
+    reviews: [ { rating: 5 }, { rating: 5 }, { rating: 5 }, { rating: 4 }, { rating: 5 }, { rating: 5 } ]
+  },
 
-// --- KATEGORIJA: ČLANARINE ---
+  // --- KATEGORIJA: ČLANARINE ---
   {
     name: 'Mesečna - Pun Pristup',
     image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1170&auto=format&fit=crop',
@@ -145,7 +169,7 @@ const products = [
     brand: 'PowerFit',
     category: 'Članarine',
     price: 3500,
-    countInStock: 100,
+    countInStock: 30,
     rating: 4.9,
     numReviews: 4,
     reviews: [ { rating: 5 }, { rating: 5 }, { rating: 5 }, { rating: 4 } ]
@@ -157,7 +181,7 @@ const products = [
     brand: 'PowerFit',
     category: 'Članarine',
     price: 2500,
-    countInStock: 100,
+    countInStock: 30,
     rating: 5.0,
     numReviews: 1,
     reviews: [ { rating: 5 } ]
@@ -169,7 +193,7 @@ const products = [
     brand: 'PowerFit',
     category: 'Članarine',
     price: 2900,
-    countInStock: 100,
+    countInStock: 30,
     rating: 4.6,
     numReviews: 2,
     reviews: [ { rating: 4 }, { rating: 5 } ]
