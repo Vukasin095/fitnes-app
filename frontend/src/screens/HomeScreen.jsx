@@ -32,27 +32,26 @@ const HomeScreen = () => {
                 <>
                     <Row className='gx-4 gy-4'>
                         <Col md={3} lg={2} className='mb-4'>
-                            <div className='p-3 rounded-3' style={{ backgroundColor: '#282d3a', border: '1px solid #3f4756' }}>
-                                <h5 className='text-white mb-3 fw-bold tracking-wider' style={{ fontSize: '0.95rem' }}>
+                            <div className='filter-panel'>
+                                <h5 className='filter-heading'>
                                     FILTERI
                                 </h5>
 
                                 <div className='mb-3'>
-                                    <label className='form-label text-white-50 mb-2' style={{ fontSize: '0.85rem' }}>
+                                    <label className='filter-label'>
                                         Pretraga proizvoda
                                     </label>
                                     <input
                                         type='text'
-                                        className='form-control bg-dark text-white border-secondary w-100'
+                                        className='form-control filter-input w-100'
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder='Unesite pojam...'
-                                        style={{ minHeight: '42px' }}
                                     />
                                 </div>
 
                                 <div className='mb-3'>
-                                    <label className='form-label text-white-50 mb-2' style={{ fontSize: '0.85rem' }}>
+                                    <label className='filter-label'>
                                         Kategorija
                                     </label>
                                     <div className='d-grid gap-2'>
@@ -61,16 +60,7 @@ const HomeScreen = () => {
                                                 key={category}
                                                 type='button'
                                                 onClick={() => setActiveCategory(category)}
-                                                className={`btn btn-outline-secondary text-start text-white ${category === activeCategory ? 'border-2 border-warning text-warning' : ''}`}
-                                                style={{
-                                                    backgroundColor: category === activeCategory ? '#2a3344' : 'transparent',
-                                                    borderColor: category === activeCategory ? '#ccff00' : '#3f4756',
-                                                    width: '100%',
-                                                    borderRadius: '0.85rem',
-                                                    textTransform: 'uppercase',
-                                                    fontSize: '0.85rem',
-                                                    letterSpacing: '0.04em'
-                                                }}
+                                                className={`category-button ${category === activeCategory ? 'category-button-active' : ''}`}
                                             >
                                                 {category === 'Sve' && '🎯'}
                                                 {category === 'Suplementi' && '💊'}
@@ -96,18 +86,14 @@ const HomeScreen = () => {
                             <Row className='gy-4'>
                                 {filteredProducts.length > 0 ? (
                                     filteredProducts.map((product) => (
-                                        <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                                        <Col key={product._id} sm={12} md={6} lg={4} xl={3} className='d-flex align-items-stretch'>
                                             <Product product={product} />
                                         </Col>
                                     ))
                                 ) : (
                                     <Col xs={12}>
-                                        <div style={{
-                                            textAlign: 'center',
-                                            padding: '3rem 1rem',
-                                            color: '#94a3b8'
-                                        }}>
-                                            <p style={{ fontSize: '1.1rem', marginBottom: '0' }}>
+                                        <div className='empty-state'>
+                                            <p className='empty-state-text'>
                                                 Nema dostupnih proizvoda u ovoj kategoriji
                                             </p>
                                         </div>

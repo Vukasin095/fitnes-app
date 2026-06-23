@@ -78,37 +78,16 @@ const ProductEditScreen = () => {
         }
     };
     return (
-        <Container style={{ paddingBottom: '3rem' }}>
+        <Container className='admin-page-container'>
             <Row className='mb-4'>
                 <Col>
-                    <Link to='/admin/productlist' style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        color: '#ccff00',
-                        textDecoration: 'none',
-                        fontWeight: 700,
-                        fontSize: '1rem',
-                        transition: 'all 0.3s ease'
-                    }} onMouseEnter={(e) => {
-                        e.currentTarget.style.opacity = '0.7';
-                    }} onMouseLeave={(e) => {
-                        e.currentTarget.style.opacity = '1';
-                    }}>
+                    <Link to='/admin/productlist' className='back-link'>
                         <FaArrowLeft /> Nazad
                     </Link>
                 </Col>
             </Row>
             <FormContainer>
-                <h1 style={{
-                    fontSize: '2rem',
-                    fontWeight: 900,
-                    color: '#ffffff',
-                    marginBottom: '2rem',
-                    textAlign: 'center'
-                }}>
-                    ⚙️ UREDI PROIZVOD
-                </h1>
+                <h1 className='page-heading'>⚙️ UREDI PROIZVOD</h1>
                 {loadingUpdate && <Loader />}
                 {isLoading ? (
                     <Loader />
@@ -117,112 +96,57 @@ const ProductEditScreen = () => {
                 ) : (
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId='name' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Naziv proizvoda</Form.Label>
+                            <Form.Label className='form-label'>Naziv proizvoda</Form.Label>
                             <Form.Control
                                 type='text'
                                 placeholder='Unesite naziv proizvoda'
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#ffffff',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem'
-                                }}
+                                className='form-input'
                             ></Form.Control>
                         </Form.Group>
                         <Form.Group controlId='price' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Cena (RSD)</Form.Label>
+                            <Form.Label className='form-label'>Cena (RSD)</Form.Label>
                             <Form.Control
                                 type='number'
                                 placeholder='Unesite cenu proizvoda'
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#ffffff',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem'
-                                }}
+                                className='form-input'
                             ></Form.Control>
                         </Form.Group>
                         <Form.Group controlId='image' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Slika</Form.Label>
+                            <Form.Label className='form-label'>Slika</Form.Label>
                             <Form.Control
                                 type='text'
                                 placeholder='Unesite URL slike proizvoda'
                                 value={image}
                                 onChange={(e) => setImage(e.target.value)}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#ffffff',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem',
-                                    marginBottom: '1rem'
-                                }}>
+                                className='form-input mb-3'>
                             </Form.Control>
                             <FormControl 
                                 type='file' 
                                 label='Odaberi sliku'
                                 onChange={uploadFileHandler}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#cbd5e1',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem'
-                                }}>
+                                className='form-input'>
                             </FormControl>
                         </Form.Group>
                         <Form.Group controlId='countInStock' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Količina na skladištu</Form.Label>
+                            <Form.Label className='form-label'>Količina na skladištu</Form.Label>
                             <Form.Control
                                 type='number'
                                 placeholder='Unesite dostupnu količinu'
                                 value={countInStock}
                                 onChange={(e) => setCountInStock(e.target.value)}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#ffffff',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem'
-                                }}
+                                className='form-input'
                             ></Form.Control>
                         </Form.Group>
                         <Form.Group controlId='category' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Kategorija</Form.Label>
+                            <Form.Label className='form-label'>Kategorija</Form.Label>
                             <Form.Select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className='bg-dark text-white border-secondary'
-                                style={{
-                                    borderRadius: '8px',
-                                    padding: '0.8rem'
-                                }}
+                                className='form-input'
                             >
                                 <option value=''>Izaberite kategoriju...</option>
                                 {uniqueCategories.map((cat) => (
@@ -231,38 +155,19 @@ const ProductEditScreen = () => {
                             </Form.Select>
                         </Form.Group>
                         <Form.Group controlId='description' className='mb-3'>
-                            <Form.Label style={{
-                                color: '#cbd5e1',
-                                fontWeight: 700,
-                                fontSize: '0.95rem'
-                            }}>Opis</Form.Label>
+                            <Form.Label className='form-label'>Opis</Form.Label>
                             <Form.Control
                                 as='textarea'
                                 rows={3}
                                 placeholder='Unesite opis proizvoda'
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                style={{
-                                    background: '#2a2f3d',
-                                    border: '1px solid #3f4756',
-                                    color: '#ffffff',
-                                    borderRadius: '8px',
-                                    padding: '0.8rem',
-                                    resize: 'vertical'
-                                }}
+                                className='form-input'
                             ></Form.Control>
                         </Form.Group>
                         <Button
                             type='submit'
-                            className='add-to-cart-btn w-100'
-                            style={{
-                                marginTop: '1.5rem',
-                                padding: '0.8rem',
-                                fontWeight: 800,
-                                borderRadius: '12px',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.02em'
-                            }}
+                            className='add-to-cart-btn w-100 mt-3'
                         >
                             Ažuriraj proizvod
                         </Button>

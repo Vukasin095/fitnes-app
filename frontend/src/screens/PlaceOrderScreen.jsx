@@ -50,137 +50,61 @@ const PlaceOrderScreen = () => {
                 {/* LEFT: Order Details */}
                 <Col lg={8}>
                     {/* Shipping Address Card */}
-                    <Card className='border-0 shadow-soft mb-3' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #ccff00'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#ccff00',
-                            marginBottom: '1.5rem',
-                            letterSpacing: '0.02em'
-                        }}>
+                    <Card className='border-0 shadow-soft mb-3 place-shipping-card'>
+                        <h3 className='place-section-heading place-shipping-heading'>
                             📍 Adresa za dostavu
                         </h3>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.8rem',
-                            color: '#cbd5e1',
-                            fontSize: '1rem',
-                            lineHeight: 1.7
-                        }}>
+                        <div className='place-shipping-info'>
                             <div>
-                                <span style={{ color: '#94a3b8' }}>Adresa:</span> {cart.shippingAddress.address}
+                                <span className='muted-label'>Adresa:</span> {cart.shippingAddress.address}
                             </div>
                             <div>
-                                <span style={{ color: '#94a3b8' }}>Grad:</span> {cart.shippingAddress.city}
+                                <span className='muted-label'>Grad:</span> {cart.shippingAddress.city}
                             </div>
                             <div>
-                                <span style={{ color: '#94a3b8' }}>Poštanski broj:</span> {cart.shippingAddress.postalCode}
+                                <span className='muted-label'>Poštanski broj:</span> {cart.shippingAddress.postalCode}
                             </div>
                             <div>
-                                <span style={{ color: '#94a3b8' }}>Država:</span> {cart.shippingAddress.country}
+                                <span className='muted-label'>Država:</span> {cart.shippingAddress.country}
                             </div>
                         </div>
                     </Card>
 
                     {/* Payment Method Card */}
-                    <Card className='border-0 shadow-soft mb-3' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #ff4500'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#ff4500',
-                            marginBottom: '1rem',
-                            letterSpacing: '0.02em'
-                        }}>
+                    <Card className='border-0 shadow-soft mb-3 place-payment-card'>
+                        <h3 className='place-section-heading place-payment-heading'>
                             💳 Način plaćanja
                         </h3>
-                        <div style={{
-                            fontSize: '1.1rem',
-                            fontWeight: 700,
-                            color: '#ffffff',
-                            padding: '1rem',
-                            background: 'rgba(255, 69, 0, 0.1)',
-                            borderRadius: '10px'
-                        }}>
+                        <div className='place-payment-info'>
                             {cart.paymentMethod}
                         </div>
                     </Card>
 
                     {/* Order Items Card */}
-                    <Card className='border-0 shadow-soft' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #3b82f6'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#3b82f6',
-                            marginBottom: '1.5rem',
-                            letterSpacing: '0.02em'
-                        }}>
+                    <Card className='border-0 shadow-soft place-items-card'>
+                        <h3 className='place-section-heading place-items-heading'>
                             📦 Stavke porudžbine
                         </h3>
                         {cart.cartItems.length === 0 ? (
                             <Message>Vaša korpa je prazna</Message>
                         ) : (
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '1.5rem'
-                            }}>
+                            <div className='place-items-list'>
                                 {cart.cartItems.map((item, index) => (
-                                    <div key={index} style={{
-                                        display: 'flex',
-                                        gap: '1.5rem',
-                                        paddingBottom: '1.5rem',
-                                        borderBottom: index !== cart.cartItems.length - 1 ? '1px solid #2e3545' : 'none'
-                                    }}>
+                                    <div key={index} className={`place-item-row ${index !== cart.cartItems.length - 1 ? 'place-item-divider' : ''}`}>
                                         <Image
                                             src={item.image}
                                             alt={item.name}
                                             fluid
-                                            style={{
-                                                maxHeight: '100px',
-                                                maxWidth: '100px',
-                                                objectFit: 'cover',
-                                                borderRadius: '10px'
-                                            }}
+                                            className='place-item-image'
                                         />
-                                        <div style={{ flex: 1 }}>
-                                            <Link to={`/product/${item.product}`} style={{
-                                                color: '#ccff00',
-                                                fontWeight: 700,
-                                                textDecoration: 'none',
-                                                fontSize: '1.05rem',
-                                                marginBottom: '0.5rem',
-                                                display: 'block'
-                                            }}>
+                                        <div className='place-item-body'>
+                                            <Link to={`/product/${item.product}`} className='place-item-link'>
                                                 {item.name}
                                             </Link>
-                                            <div style={{
-                                                color: '#94a3b8',
-                                                fontSize: '0.9rem',
-                                                marginBottom: '0.5rem'
-                                            }}>
+                                            <div className='place-item-desc'>
                                                 {item.qty} x {item.price.toFixed(2)} RSD
                                             </div>
-                                            <div style={{
-                                                fontSize: '1.2rem',
-                                                fontWeight: 800,
-                                                color: '#ccff00'
-                                            }}>
+                                            <div className='place-item-total'>
                                                 = {(item.qty * item.price).toFixed(2)} RSD
                                             </div>
                                         </div>
@@ -193,92 +117,52 @@ const PlaceOrderScreen = () => {
 
                 {/* RIGHT: Order Summary */}
                 <Col lg={4}>
-                    <Card className='border-0 shadow-soft' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2.5rem',
-                        borderRadius: '20px',
-                        position: 'sticky',
-                        top: '110px'
-                    }}>
-                        <h2 style={{
-                            fontSize: '1.6rem',
-                            fontWeight: 900,
-                            color: '#ffffff',
-                            marginBottom: '2rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.04em'
-                        }}>
+                    <Card className='border-0 shadow-soft order-summary-card'>
+                        <h2 className='order-summary-title'>
                             📋 Rezime
                         </h2>
 
                         {/* Summary Lines */}
-                        <div style={{
-                            borderTop: '1px solid #2e3545',
-                            borderBottom: '1px solid #2e3545',
-                            padding: '1.5rem 0',
-                            marginBottom: '2rem'
-                        }}>
-                            <Row style={{ marginBottom: '1rem' }}>
+                        <div className='order-summary-lines'>
+                            <Row className='summary-row'>
                                 <Col>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.95rem' }}>Proizvodi:</span>
+                                    <span className='summary-label'>Proizvodi:</span>
                                 </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {Number(cart.itemsPrice).toFixed(2)} RSD
-                                    </span>
+                                <Col className='summary-value'>
+                                    <span className='order-summary-value'>{Number(cart.itemsPrice).toFixed(2)} RSD</span>
                                 </Col>
                             </Row>
-                            <Row style={{ marginBottom: '1rem' }}>
+                            <Row className='summary-row'>
                                 <Col>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.95rem' }}>Dostava:</span>
+                                    <span className='summary-label'>Dostava:</span>
                                 </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {Number(cart.shippingPrice).toFixed(2)} RSD
-                                    </span>
+                                <Col className='summary-value'>
+                                    <span className='order-summary-value'>{Number(cart.shippingPrice).toFixed(2)} RSD</span>
                                 </Col>
                             </Row>
-                            <Row style={{ marginBottom: '1rem' }}>
+                            <Row className='summary-row'>
                                 <Col>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.95rem' }}>PDV:</span>
+                                    <span className='summary-label'>PDV:</span>
                                 </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {Number(cart.taxPrice).toFixed(2)} RSD
-                                    </span>
+                                <Col className='summary-value'>
+                                    <span className='order-summary-value'>{Number(cart.taxPrice).toFixed(2)} RSD</span>
                                 </Col>
                             </Row>
                         </div>
 
                         {/* Total */}
-                        <Row style={{
-                            marginBottom: '2rem',
-                            paddingBottom: '1.5rem',
-                            borderBottom: '2px solid #ccff00'
-                        }}>
+                        <Row className='summary-total-row'>
                             <Col>
-                                <span style={{
-                                    fontSize: '1.1rem',
-                                    fontWeight: 800,
-                                    color: '#ffffff'
-                                }}>
-                                    UKUPNO:
-                                </span>
+                                <span className='summary-total-label'>UKUPNO:</span>
                             </Col>
-                            <Col style={{ textAlign: 'right' }}>
-                                <span style={{
-                                    fontSize: '1.8rem',
-                                    fontWeight: 900,
-                                    color: '#ccff00'
-                                }}>
-                                    {Number(cart.totalPrice).toFixed(2)} RSD
-                                </span>
+                            <Col className='summary-value'>
+                                <span className='summary-total-value'>{Number(cart.totalPrice).toFixed(2)} RSD</span>
                             </Col>
                         </Row>
 
                         {/* Error Message */}
                         {error && (
-                            <Message variant='danger' style={{ marginBottom: '1rem' }}>
+                            <Message variant='danger' className='mb-3'>
                                 {error}
                             </Message>
                         )}
@@ -286,33 +170,16 @@ const PlaceOrderScreen = () => {
                         {/* Place Order Button */}
                         <Button
                             type='button'
-                            className='add-to-cart-btn'
+                            className='add-to-cart-btn neon-submit-btn'
                             disabled={cart.cartItems === 0 || isLoading}
                             onClick={placeOrderHandler}
-                            style={{
-                                width: '100%',
-                                padding: '1rem',
-                                fontSize: '1rem',
-                                fontWeight: 800,
-                                borderRadius: '14px',
-                                letterSpacing: '0.03em',
-                                marginBottom: '1rem'
-                            }}
                         >
                             {isLoading ? '⏳ Učitavanje...' : '✓ PORUČI SADA'}
                         </Button>
 
                         {isLoading && <Loader />}
 
-                        <div style={{
-                            padding: '1rem',
-                            background: 'rgba(59, 130, 246, 0.1)',
-                            borderRadius: '10px',
-                            color: '#93c5fd',
-                            fontSize: '0.85rem',
-                            lineHeight: 1.6,
-                            textAlign: 'center'
-                        }}>
+                        <div className='place-action-note'>
                             ℹ️ Pritisnite "Poruči sada" da potvrdite porudžbinu. Sledeći korak će biti plaćanje.
                         </div>
                     </Card>

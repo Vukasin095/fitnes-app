@@ -31,96 +31,69 @@ const UserCreateScreen = () => {
         }
     };
 
-    const inputStyle = {
-        background: '#1f232d',
-        border: '1px solid #3f4756',
-        color: '#e2e8f0',
-        borderRadius: '12px',
-        padding: '0.85rem',
-    };
-
-    const buttonStyle = {
-        marginTop: '1.5rem',
-        width: '100%',
-        background: 'linear-gradient(135deg, #ccff00 0%, #9ae600 100%)',
-        border: '1px solid rgba(204, 255, 0, 0.7)',
-        color: '#0f1117',
-        fontWeight: 800,
-        padding: '0.95rem 0.85rem',
-        borderRadius: '14px',
-        boxShadow: '0 16px 40px rgba(0, 0, 0, 0.18)',
-    };
 
     return (
         <>
-            <Link
-                to='/admin/userlist'
-                className='btn btn-outline-light my-3'
-                style={{ borderRadius: '10px', borderColor: '#3f4756', color: '#ffffff' }}
-            >
-                Nazad
-            </Link>
+            <Link to='/admin/userlist' className='back-link my-3'>Nazad</Link>
             <FormContainer>
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <h1 style={{ color: '#ffffff', fontWeight: 900, marginBottom: '0.5rem' }}>Novi korisnik</h1>
-                    <p style={{ color: '#94a3b8', margin: 0 }}>Kreirajte novog člana ili administratora sa modernim premium izgledom.</p>
+                <div className='mb-3'>
+                    <h1 className='admin-page-title'>Novi korisnik</h1>
+                    <p className='text-muted mb-0'>Kreirajte novog člana ili administratora sa modernim premium izgledom.</p>
                 </div>
                 {isLoading && <Loader />}
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='name' className='mb-3'>
-                        <Form.Label style={{ color: '#cbd5e1', fontWeight: 700 }}>Ime</Form.Label>
+                        <Form.Label className='form-label'>Ime</Form.Label>
                         <Form.Control
                             type='text'
                             placeholder='Unesite ime korisnika'
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            style={inputStyle}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='email' className='mb-3'>
-                        <Form.Label style={{ color: '#cbd5e1', fontWeight: 700 }}>Email</Form.Label>
+                        <Form.Label className='form-label'>Email</Form.Label>
                         <Form.Control
                             type='email'
                             placeholder='Unesite email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            style={inputStyle}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='password' className='mb-3'>
-                        <Form.Label style={{ color: '#cbd5e1', fontWeight: 700 }}>Lozinka</Form.Label>
+                        <Form.Label className='form-label'>Lozinka</Form.Label>
                         <Form.Control
                             type='password'
                             placeholder='Unesite lozinku'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            style={inputStyle}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='isadmin' className='my-2'>
                         <Form.Check
                             type='checkbox'
-                            label='Admin'
+                            label={<span className='form-check-label'>Admin</span>}
                             checked={isAdmin}
                             onChange={(e) => setIsAdmin(e.target.checked)}
-                            style={{ color: '#e2e8f0' }}
                         />
                     </Form.Group>
 
                     <Form.Group controlId='ismember' className='my-2'>
                         <Form.Check
                             type='checkbox'
-                            label='Member'
+                            label={<span className='form-check-label'>Member</span>}
                             checked={isMember}
                             onChange={(e) => setIsMember(e.target.checked)}
-                            style={{ color: '#e2e8f0' }}
                         />
                     </Form.Group>
 
-                    <Button type='submit' style={buttonStyle}>
+                    <Button type='submit' className='neon-submit-btn w-100'>
                         Kreiraj korisnika
                     </Button>
                 </Form>

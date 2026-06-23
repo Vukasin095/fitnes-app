@@ -2,21 +2,11 @@ import { Spinner } from "react-bootstrap";
 
 const Loader = () => {
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '200px'
-        }}>
+        <div className="loader-center">
             <Spinner
                 animation="border"
                 role="status"
-                style={{
-                    width: "100px",
-                    height: "100px",
-                    color: '#ccff00',
-                    borderWidth: '4px'
-                }}
+                className="loader-spinner"
             >
                 <span className="visually-hidden">Učitavanje...</span>
             </Spinner>

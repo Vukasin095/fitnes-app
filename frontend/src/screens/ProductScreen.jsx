@@ -117,25 +117,9 @@ const ProductScreen = () => {
     const ratingValue = selectedRating || currentRating || 0;
 
     return (<>
-        <div style={{
-            marginBottom: '1rem',
-            color: '#94a3b8',
-            fontSize: '0.9rem',
-            letterSpacing: '0.08em'
-        }}>
-            Početna / Proizvodi / Detalji proizvoda
-        </div>
-        <Link className='btn btn-outline-secondary mb-4' to='/' style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 1.2rem',
-            borderRadius: '12px',
-            fontWeight: 600,
-            letterSpacing: '0.02em',
-            fontSize: '0.95rem'
-        }}>
-            <FaArrowLeft style={{ fontSize: '1rem' }} /> Nazad na proizvode
+        <div className='breadcrumb-line'>Početna / Proizvodi / Detalji proizvoda</div>
+        <Link className='product-back-link btn btn-outline-secondary mb-4' to='/'>
+            <FaArrowLeft className='product-back-icon' /> Nazad na proizvode
         </Link>
 
         {isLoading ? (
@@ -148,72 +132,31 @@ const ProductScreen = () => {
             <Row className='gy-5 align-items-stretch'>
                 {/* LEFT: Large Product Image Display */}
                 <Col lg={7}>
-                    <Card className='border-0 shadow-soft h-100' style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        padding: '2.5rem',
-                        background: 'linear-gradient(135deg, #1c1f2a, #141720)'
-                    }}>
-                        <div style={{
-                            textAlign: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <Image
-                                src={product.image}
-                                alt={product.name}
-                                fluid
-                                style={{
-                                    maxHeight: '600px',
-                                    objectFit: 'contain',
-                                    borderRadius: '20px'
-                                }}
-                            />
+                    <Card className='product-image-card'>
+                        <div className='product-image-wrap'>
+                            <Image src={product.image} alt={product.name} fluid className='product-large-image' />
                         </div>
                     </Card>
                 </Col>
 
                 {/* RIGHT: Compact Action Block */}
                 <Col lg={5}>
-                    <Card className='border-0 shadow-soft' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '20px'
-                    }}>
-                        <Card.Body style={{ padding: 0 }}>
+                    <Card className='product-action-card'>
+                        <Card.Body>
                             {/* Product Title */}
-                            <h1 style={{
-                                fontSize: '2rem',
-                                fontWeight: 900,
-                                color: '#ffffff',
-                                marginBottom: '1rem',
-                                lineHeight: 1.2
-                            }}>
-                                {product.name}
-                            </h1>
+                            <h1 className='product-detail-title'>{product.name}</h1>
 
                             {/* Price - Bold & Prominent */}
-                            <div style={{
-                                fontSize: '3rem',
-                                fontWeight: 900,
-                                color: '#ccff00',
-                                letterSpacing: '0.04em',
-                                marginBottom: '1.5rem',
-                                textTransform: 'uppercase'
-                            }}>
-                                {product.price.toFixed(2)} RSD
-                            </div>
+                            <div className='product-detail-price'>{product.price.toFixed(2)} RSD</div>
 
                             {/* Rating Component with Interactive Stars */}
-                            <div style={{ marginBottom: '2rem' }}>
+                            <div className='product-detail-rating'>
                                 {(() => {
                                     const count = currentNumReviews || 0;
                                     const pluralForm = count === 1 ? 'recenzija' : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) ? 'recenzije' : 'recenzija';
                                     return `Ocena: ${Number(currentRating || 0).toFixed(2)} (${count} ${pluralForm})`;
                                 })()}
-                                <div style={{ marginTop: '0.8rem' }}>
+                                <div className='product-rating-value'>
                                     <Rating
                                         value={ratingValue}
                                         text=''
@@ -223,44 +166,21 @@ const ProductScreen = () => {
                                     />
                                 </div>
                                 {reviewError && (
-                                    <div style={{
-                                        color: '#ff6b6b',
-                                        fontSize: '0.9rem',
-                                        marginTop: '0.8rem'
-                                    }}>
+                                    <div className='product-review-error'>
                                         {reviewError}
                                     </div>
                                 )}
                             </div>
 
                             {/* Stock Status */}
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '1rem',
-                                marginBottom: '2rem'
-                            }}>
-                                <span style={{ color: '#94a3b8', fontWeight: 600 }}>Dostupnost:</span>
+                            <div className='product-detail-stock mb-4'>
+                                <span className='product-category-label'>Dostupnost:</span>
                                 {product.countInStock > 0 ? (
-                                    <Badge bg='' style={{
-                                        background: 'rgba(34, 197, 94, 0.2)',
-                                        color: '#22c55e',
-                                        padding: '0.5rem 0.9rem',
-                                        borderRadius: '8px',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.02em'
-                                    }}>
+                                    <Badge className='product-status-badge available'>
                                         ✓ Dostupno
                                     </Badge>
                                 ) : (
-                                    <Badge bg='' style={{
-                                        background: 'rgba(239, 68, 68, 0.2)',
-                                        color: '#ef4444',
-                                        padding: '0.5rem 0.9rem',
-                                        borderRadius: '8px',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.02em'
-                                    }}>
+                                    <Badge className='product-status-badge unavailable'>
                                         ✗ Nije dostupno
                                     </Badge>
                                 )}
@@ -268,27 +188,9 @@ const ProductScreen = () => {
 
                             {/* Quantity Selector */}
                             {product.countInStock > 0 && (
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '1rem',
-                                    marginBottom: '2.5rem'
-                                }}>
-                                    <span style={{ color: '#94a3b8', fontWeight: 600, whiteSpace: 'nowrap' }}>Količina:</span>
-                                    <Form.Control
-                                        as='select'
-                                        value={qty}
-                                        onChange={(e) => setQty(Number(e.target.value))}
-                                        style={{
-                                            width: '100px',
-                                            textAlign: 'center',
-                                            background: '#252a37 !important',
-                                            border: '1px solid #3f485e !important',
-                                            color: '#ffffff !important',
-                                            borderRadius: '10px',
-                                            fontWeight: 700
-                                        }}
-                                    >
+                                <div className='product-qty-row'>
+                                    <span className='product-qty-label'>Količina:</span>
+                                    <Form.Control as='select' value={qty} onChange={(e) => setQty(Number(e.target.value))} className='product-qty-select'>
                                         {[...Array(product.countInStock).keys()].map((x) => (
                                             <option key={x + 1} value={x + 1}>
                                                 {x + 1}
@@ -299,46 +201,14 @@ const ProductScreen = () => {
                             )}
 
                             {/* Add to Cart Button */}
-                            <div style={{ display: 'grid', marginBottom: '1.5rem' }}>
-                                <Button
-                                    className='add-to-cart-btn'
-                                    type='button'
-                                    disabled={product.countInStock === 0}
-                                    onClick={addToCartHandler}
-                                    style={{
-                                        padding: '1rem',
-                                        fontSize: '1.1rem',
-                                        fontWeight: 800,
-                                        borderRadius: '14px',
-                                        letterSpacing: '0.03em'
-                                    }}
-                                >
-                                    DODAJ U KORPU
-                                </Button>
+                            <div className='product-action-buttons'>
+                                <Button className='add-to-cart-btn neon-submit-btn' type='button' disabled={product.countInStock === 0} onClick={addToCartHandler}>DODAJ U KORPU</Button>
                             </div>
 
                             {/* Category Badge */}
-                            <div style={{
-                                padding: '1rem',
-                                background: 'rgba(204, 255, 0, 0.08)',
-                                borderRadius: '12px',
-                                borderLeft: '3px solid #ccff00'
-                            }}>
-                                <span style={{
-                                    color: '#94a3b8',
-                                    fontSize: '0.9rem',
-                                    display: 'block',
-                                    marginBottom: '0.3rem'
-                                }}>
-                                    Kategorija
-                                </span>
-                                <span style={{
-                                    color: '#ccff00',
-                                    fontWeight: 700,
-                                    fontSize: '1rem'
-                                }}>
-                                    {product.category}
-                                </span>
+                            <div className='product-category-box'>
+                                <span className='product-category-label'>Kategorija</span>
+                                <span className='product-category-value'>{product.category}</span>
                             </div>
                         </Card.Body>
                     </Card>
@@ -349,26 +219,11 @@ const ProductScreen = () => {
         {product && (
             <Row className='gy-4 mt-4'>
                 <Col lg={12}>
-                    <Card className='border-0 shadow-soft' style={{
-                        padding: '2.5rem',
-                        background: 'linear-gradient(135deg, #1c1f2a, #141720)',
-                        borderRadius: '20px'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.5rem',
-                            fontWeight: 800,
-                            color: '#ffffff',
-                            marginBottom: '1.5rem',
-                            letterSpacing: '0.02em'
-                        }}>
+                    <Card className='border-0 shadow-soft product-description-card'>
+                        <h3 className='product-description-title'>
                             📝 Opis proizvoda
                         </h3>
-                        <p style={{
-                            color: '#cbd5e1',
-                            fontSize: '1.05rem',
-                            lineHeight: 1.8,
-                            margin: 0
-                        }}>
+                        <p className='product-description-text'>
                             {product.description}
                         </p>
                     </Card>

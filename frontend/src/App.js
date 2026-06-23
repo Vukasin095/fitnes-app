@@ -10,7 +10,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="app-content-wrapper" style={{ paddingTop: '140px !important' }}>
+      <main className="app-content-wrapper">
         <Container>
           <Outlet />
         </Container>

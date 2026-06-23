@@ -49,46 +49,18 @@ const RegisterScreen = () => {
     };
 
     return (
-        <Container style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 'calc(100vh - 110px)',
-            paddingTop: '2rem',
-            paddingBottom: '2rem'
-        }}>
-            <Card className='border-0 w-100' style={{
-                maxWidth: '450px',
-                background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                padding: '3rem 2.5rem',
-                borderRadius: '20px',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
-            }}>
-                <h1 style={{
-                    fontSize: '2rem',
-                    fontWeight: 900,
-                    color: '#ffffff',
-                    marginBottom: '0.5rem',
-                    letterSpacing: '0.02em'
-                }}>
+        <Container className='auth-screen-wrapper'>
+            <Card className='auth-card'>
+                <h1 className='auth-heading'>
                     ✨ REGISTRACIJA
                 </h1>
-                <p style={{
-                    color: '#94a3b8',
-                    marginBottom: '2rem',
-                    fontSize: '0.95rem'
-                }}>
+                <p className='auth-subtitle'>
                     Napravite novi nalog
                 </p>
 
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId="name" className="mb-3">
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            fontSize: '0.9rem',
-                            marginBottom: '0.5rem'
-                        }}>
+                        <Form.Label className='auth-form-label'>
                             Ime
                         </Form.Label>
                         <Form.Control 
@@ -96,23 +68,12 @@ const RegisterScreen = () => {
                             placeholder="Unesite ime" 
                             value={name} 
                             onChange={(e) => setName(e.target.value)}
-                            style={{
-                                background: '#252a37 !important',
-                                border: '1px solid #3f485e !important',
-                                color: '#ffffff !important',
-                                borderRadius: '10px',
-                                padding: '0.75rem'
-                            }}
+                            className='auth-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId="email" className="mb-3">
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            fontSize: '0.9rem',
-                            marginBottom: '0.5rem'
-                        }}>
+                        <Form.Label className='auth-form-label'>
                             Email adresa
                         </Form.Label>
                         <Form.Control 
@@ -120,23 +81,12 @@ const RegisterScreen = () => {
                             placeholder="Unesite email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)}
-                            style={{
-                                background: '#252a37 !important',
-                                border: '1px solid #3f485e !important',
-                                color: '#ffffff !important',
-                                borderRadius: '10px',
-                                padding: '0.75rem'
-                            }}
+                            className='auth-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId="password" className="mb-3">
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            fontSize: '0.9rem',
-                            marginBottom: '0.5rem'
-                        }}>
+                        <Form.Label className='auth-form-label'>
                             Lozinka
                         </Form.Label>
                         <Form.Control 
@@ -144,23 +94,12 @@ const RegisterScreen = () => {
                             placeholder="Unesite lozinku" 
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)}
-                            style={{
-                                background: '#252a37 !important',
-                                border: '1px solid #3f485e !important',
-                                color: '#ffffff !important',
-                                borderRadius: '10px',
-                                padding: '0.75rem'
-                            }}
+                            className='auth-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId="confirmPassword" className="mb-3">
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            fontSize: '0.9rem',
-                            marginBottom: '0.5rem'
-                        }}>
+                        <Form.Label className='auth-form-label'>
                             Potvrdi lozinku
                         </Form.Label>
                         <Form.Control 
@@ -168,52 +107,28 @@ const RegisterScreen = () => {
                             placeholder="Potvrdi lozinku" 
                             value={confirmPassword} 
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            style={{
-                                background: '#252a37 !important',
-                                border: '1px solid #3f485e !important',
-                                color: '#ffffff !important',
-                                borderRadius: '10px',
-                                padding: '0.75rem'
-                            }}
+                            className='auth-input'
                         />
                     </Form.Group>
 
                     <Button 
                         variant="primary" 
                         type="submit" 
-                        className="add-to-cart-btn mt-3 w-100"
+                        className="add-to-cart-btn auth-submit-btn"
                         disabled={isLoading}
-                        style={{
-                            padding: '0.8rem',
-                            fontWeight: 800,
-                            borderRadius: '12px',
-                            fontSize: '0.95rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.02em'
-                        }}
                     >
                         {isLoading ? <Loader /> : '✓ Registruj me'}
                     </Button>
 
-                    {isLoading && <div style={{ marginTop: '1rem' }}><Loader /></div>}
+                    {isLoading && <div className='mt-3'><Loader /></div>}
                 </Form>
 
                 <Row className="mt-4">
-                    <Col style={{
-                        textAlign: 'center',
-                        color: '#cbd5e1',
-                        fontSize: '0.9rem'
-                    }}>
+                    <Col className='text-center auth-footer-text'>
                         Imate nalog?{' '}
                         <Link 
                             to={redirect ? `/login?redirect=${redirect}` : "/login"}
-                            style={{
-                                color: '#ccff00',
-                                fontWeight: 700,
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
-                            onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+                            className='auth-footer-link'
                         >
                             Prijavite se
                         </Link>

@@ -32,18 +32,16 @@ const Product = ({ product }) => {
     }`;
 
     return (
-        <Card className='my-3 p-3 product-card shadow-soft'>
-            <Link to={`/product/${product._id}`}>
-                <Card.Img src={product.image} variant='top'
-                    style={{ height: '260px', objectFit: 'cover', borderRadius: '14px' }} />
-            </Link>
+        <Card
+            as={Link}
+            to={`/product/${product._id}`}
+            className='my-3 p-3 product-card shadow-soft product-card-link'
+        >
+            <Card.Img src={product.image} variant='top' className='product-image' />
 
-            <Card.Body>
-                <Link to={`/product/${product._id}`}>
-                    <Card.Title as='div' className='product-title'><strong>{product.name}</strong></Card.Title>
-                </Link>
-
-                <Card.Text as="div">
+            <Card.Body className='product-card-body'>
+                <Card.Title as='div' className='product-title'><strong>{product.name}</strong></Card.Title>
+                <Card.Text as='div'>
                     <Rating value={displayRating} text={`Ocena: ${Number(displayRating).toFixed(2)} (${reviewLabel})`} />
                 </Card.Text>
                 <Card.Text as='h3' className='product-price'>{product.price} RSD</Card.Text>

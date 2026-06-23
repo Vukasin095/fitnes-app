@@ -69,54 +69,16 @@ const MembershipsScreen = () => {
     return (
         <>
             {/* Header */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '3rem',
-                paddingBottom: '2rem',
-                borderBottom: '2px solid #2e3545'
-            }}>
+            <div className='memberships-header'>
                 <div>
-                    <h1 style={{
-                        fontSize: '2.8rem',
-                        fontWeight: 900,
-                        color: '#ffffff',
-                        margin: 0,
-                        marginBottom: '0.5rem',
-                        letterSpacing: '0.02em'
-                    }}>
+                    <h1 className='memberships-title'>
                         👑 Clanske kartice
                     </h1>
-                    <p style={{
-                        color: '#94a3b8',
-                        fontSize: '1rem',
-                        margin: 0
-                    }}>
+                    <p className='memberships-sub'>
                         Izaberite idealan plan za vas
                     </p>
                 </div>
-                <Link to='/' style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.6rem',
-                    padding: '0.7rem 1.4rem',
-                    borderRadius: '12px',
-                    background: 'rgba(204, 255, 0, 0.1)',
-                    border: '1px solid #ccff00',
-                    color: '#ccff00',
-                    fontWeight: 700,
-                    letterSpacing: '0.02em',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    fontSize: '0.95rem'
-                }} onMouseEnter={(e) => {
-                    e.target.style.background = 'rgba(204, 255, 0, 0.2)';
-                    e.target.style.boxShadow = '0 0 20px rgba(204, 255, 0, 0.3)';
-                }} onMouseLeave={(e) => {
-                    e.target.style.background = 'rgba(204, 255, 0, 0.1)';
-                    e.target.style.boxShadow = 'none';
-                }}>
+                <Link to='/' className='back-link'>
                     <FaArrowLeft /> Nazad na prodavnicu
                 </Link>
             </div>
@@ -127,8 +89,8 @@ const MembershipsScreen = () => {
                 <Message variant='danger'>{error?.data?.message || error.error}</Message>
             ) : memberships.length === 0 ? (
                 <Message>Trenutno nema dostupnih paketa članarina.</Message>
-            ) : (
-                <Row className='gy-4' style={{ marginBottom: '2rem' }}>
+                ) : (
+                <Row className='gy-4 membership-grid'>
                     {memberships.map((product) => {
                         const days = product.countInStock || 30;
                         let durationText = '';
@@ -153,91 +115,34 @@ const MembershipsScreen = () => {
 
                         return (
                             <Col key={product._id} sm={12} md={6} lg={4} xl={3} className='d-flex align-items-stretch'>
-                                <Card className='border-0 h-100 d-flex flex-column justify-content-between p-4' style={{
-                                    backgroundColor: '#282d3a',
-                                    border: '1px solid #3f4756',
-                                    borderRadius: '20px',
-                                    transition: 'all 0.3s ease-in-out',
-                                    boxShadow: '0 10px 20px rgba(0,0,0,0.3)'
-                                }} onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-5px)';
-                                    e.currentTarget.style.boxShadow = '0 10px 20px rgba(204, 255, 0, 0.3)';
-                                    e.currentTarget.style.borderColor = '#ccff00';
-                                }} onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.3)';
-                                    e.currentTarget.style.borderColor = '#3f4756';
-                                }}>
+                                <Card className='membership-card'>
                                     {/* Title */}
-                                    <h2 style={{
-                                        fontSize: '1.5rem',
-                                        fontWeight: 900,
-                                        color: '#ffffff',
-                                        marginBottom: '1rem',
-                                        letterSpacing: '0.02em'
-                                    }}>
+                                    <h2 className='membership-card-title'>
                                         {product.name}
                                     </h2>
 
                                     {/* Duration Badge */}
-                                    <div className='fw-bold' style={{
-                                        background: 'rgba(59, 130, 246, 0.12)',
-                                        color: '#93c5fd',
-                                        padding: '0.65rem 1rem',
-                                        borderRadius: '999px',
-                                        marginBottom: '1.5rem',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        letterSpacing: '0.02em',
-                                        fontSize: '0.95rem'
-                                    }}>
+                                    <div className='membership-duration-badge'>
                                         <span>📅</span>
                                         <span>{durationText}</span>
                                     </div>
 
                                     {/* Price */}
-                                    <div style={{
-                                        fontSize: '3rem',
-                                        fontWeight: 900,
-                                        color: '#ccff00',
-                                        letterSpacing: '0.04em',
-                                        marginBottom: '0.5rem'
-                                    }}>
+                                    <div className='membership-price'>
                                         {product.price}
                                     </div>
-                                    <p style={{
-                                        color: '#94a3b8',
-                                        fontSize: '0.9rem',
-                                        marginBottom: '2rem',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.02em'
-                                    }}>
+                                    <p className='membership-price-sub'>
                                         RSD / {durationText}
                                     </p>
 
                                     {/* Description */}
-                                    <p style={{
-                                        color: '#cbd5e1',
-                                        fontSize: '0.95rem',
-                                        lineHeight: 1.7,
-                                        marginBottom: '2rem',
-                                        flex: 1
-                                    }}>
+                                    <p className='membership-desc'>
                                         {product.description || 'Pristup svim objektima i grupnim treninzima'}
                                     </p>
 
                                     {/* Benefits List */}
-                                    <div style={{
-                                        marginBottom: '2rem',
-                                        borderTop: '1px solid #2e3545',
-                                        paddingTop: '1.5rem'
-                                    }}>
-                                        <div style={{
-                                            color: '#cbd5e1',
-                                            lineHeight: 2,
-                                            fontWeight: 600
-                                        }}>
+                                    <div className='membership-benefits'>
+                                        <div className='membership-benefits-list'>
                                             <div>✓ Pristup vrhunskim spravama</div>
                                             <div>✓ Profesionalna oprema</div>
                                             <div>✓ Grupni treninzi</div>
@@ -248,21 +153,9 @@ const MembershipsScreen = () => {
                                     {/* Button */}
                                     <Button
                                         type='button'
-                                        className='add-to-cart-btn'
                                         disabled={!isActivated || hasActiveMembership}
                                         onClick={() => addToCartHandler(product)}
-                                        style={{
-                                            background: '#ccff00',
-                                            color: '#0f1117',
-                                            border: 'none',
-                                            letterSpacing: '0.03em',
-                                            padding: '1rem',
-                                            fontSize: '1rem',
-                                            fontWeight: 800,
-                                            borderRadius: '14px',
-                                            width: '100%',
-                                            textTransform: 'uppercase'
-                                        }}
+                                        className='membership-buy-btn'
                                     >
                                         {!isActivated
                                             ? '🔐 Aktivirajte nalog'
@@ -279,19 +172,8 @@ const MembershipsScreen = () => {
 
             {/* Info Panel */}
             {isActivated && (
-                <Card className='border-0 shadow-soft' style={{
-                    background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.08))',
-                    padding: '2rem',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(34, 197, 94, 0.3)',
-                    marginTop: '2rem'
-                }}>
-                    <p style={{
-                        color: '#86efac',
-                        margin: 0,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.6
-                    }}>
+                <Card className='info-panel'>
+                    <p className='info-panel-text'>
                         <strong>✓ Nalog aktiviran:</strong> Gotovi ste da pocnete! Odaberite clansku karticu koja vam odgovara i pocnite sa treningom.
                     </p>
                 </Card>

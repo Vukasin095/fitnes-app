@@ -62,39 +62,16 @@ const ShippingScreen = () => {
     };
 
     return (
-        <div style={{
-            maxWidth: '600px',
-            margin: '0 auto',
-            padding: '2rem 0'
-        }}>
+        <div className='page-narrow'>
             <CheckoutSteps step1 step2 />
 
-            <h1 style={{
-                fontSize: '2.2rem',
-                fontWeight: 900,
-                color: '#ffffff',
-                marginBottom: '2rem',
-                marginTop: '2rem',
-                letterSpacing: '0.02em'
-            }}>
+            <h1 className='page-heading'>
                 📦 Adresa za dostavu
             </h1>
 
-            <Card className='border-0 shadow-soft' style={{
-                background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                padding: '2.5rem',
-                borderRadius: '20px',
-                marginBottom: '2rem'
-            }}>
+            <Card className='panel-card'>
                 {!hasMembership && userInfo?.isMember && hasRegularProducts && (
-                    <Alert variant='info' style={{
-                        background: 'rgba(59, 130, 246, 0.15)',
-                        border: '1px solid #3b82f6',
-                        color: '#93c5fd',
-                        borderRadius: '12px',
-                        marginBottom: '2rem',
-                        padding: '1rem'
-                    }}>
+                    <Alert variant='info' className='info-alert'>
                         <strong>ℹ️ Preuzimanje u teretani dostupno:</strong> Kao član teretane, možete preuzeti proizvode lično u teretani!
                     </Alert>
                 )}
@@ -107,22 +84,10 @@ const ShippingScreen = () => {
                                 label='✓ Preuzmi lično u teretani'
                                 checked={pickupAtGym}
                                 onChange={(e) => setPickupAtGym(e.target.checked)}
-                                style={{
-                                    fontSize: '1.05rem',
-                                    fontWeight: 700,
-                                    color: '#ffffff'
-                                }}
+                                className='pickup-checkbox'
                             />
                             {pickupAtGym && (
-                                <div style={{
-                                    marginTop: '1rem',
-                                    padding: '1rem',
-                                    background: 'rgba(34, 197, 94, 0.1)',
-                                    border: '1px solid #22c55e',
-                                    borderRadius: '10px',
-                                    color: '#86efac',
-                                    fontSize: '0.9rem'
-                                }}>
+                                <div className='pickup-note'>
                                     ✓ Adresa će biti postavljena na lokaciju teretane
                                 </div>
                             )}
@@ -131,11 +96,7 @@ const ShippingScreen = () => {
 
                     {/* Address Fields */}
                     <Form.Group controlId='address' className='mb-3'>
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            marginBottom: '0.6rem'
-                        }}>
+                        <Form.Label className='form-label'>
                             Adresa
                         </Form.Label>
                         <Form.Control
@@ -145,23 +106,12 @@ const ShippingScreen = () => {
                             required
                             disabled={hasMembership || pickupAtGym}
                             onChange={(e) => setAddress(e.target.value)}
-                            style={{
-                                background: hasMembership || pickupAtGym ? '#1c1f2a' : '#252a37',
-                                border: '1px solid #3f485e',
-                                color: '#ffffff',
-                                borderRadius: '12px',
-                                padding: '0.85rem',
-                                fontSize: '1rem'
-                            }}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='city' className='mb-3'>
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            marginBottom: '0.6rem'
-                        }}>
+                        <Form.Label className='form-label'>
                             Grad
                         </Form.Label>
                         <Form.Control
@@ -171,23 +121,12 @@ const ShippingScreen = () => {
                             required
                             disabled={hasMembership || pickupAtGym}
                             onChange={(e) => setCity(e.target.value)}
-                            style={{
-                                background: hasMembership || pickupAtGym ? '#1c1f2a' : '#252a37',
-                                border: '1px solid #3f485e',
-                                color: '#ffffff',
-                                borderRadius: '12px',
-                                padding: '0.85rem',
-                                fontSize: '1rem'
-                            }}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='postalCode' className='mb-3'>
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            marginBottom: '0.6rem'
-                        }}>
+                        <Form.Label className='form-label'>
                             Poštanski broj
                         </Form.Label>
                         <Form.Control
@@ -197,23 +136,12 @@ const ShippingScreen = () => {
                             required
                             disabled={hasMembership || pickupAtGym}
                             onChange={(e) => setPostalCode(e.target.value)}
-                            style={{
-                                background: hasMembership || pickupAtGym ? '#1c1f2a' : '#252a37',
-                                border: '1px solid #3f485e',
-                                color: '#ffffff',
-                                borderRadius: '12px',
-                                padding: '0.85rem',
-                                fontSize: '1rem'
-                            }}
+                            className='form-input'
                         />
                     </Form.Group>
 
                     <Form.Group controlId='country' className='mb-4'>
-                        <Form.Label style={{
-                            fontWeight: 700,
-                            color: '#cbd5e1',
-                            marginBottom: '0.6rem'
-                        }}>
+                        <Form.Label className='form-label'>
                             Država
                         </Form.Label>
                         <Form.Control
@@ -223,44 +151,20 @@ const ShippingScreen = () => {
                             required
                             disabled={hasMembership || pickupAtGym}
                             onChange={(e) => setCountry(e.target.value)}
-                            style={{
-                                background: hasMembership || pickupAtGym ? '#1c1f2a' : '#252a37',
-                                border: '1px solid #3f485e',
-                                color: '#ffffff',
-                                borderRadius: '12px',
-                                padding: '0.85rem',
-                                fontSize: '1rem'
-                            }}
+                            className='form-input'
                         />
                     </Form.Group>
 
-                    <Button type='submit' className='add-to-cart-btn' style={{
-                        width: '100%',
-                        padding: '1rem',
-                        fontSize: '1rem',
-                        fontWeight: 800,
-                        borderRadius: '14px',
-                        letterSpacing: '0.03em'
-                    }}>
+                    <Button type='submit' className='add-to-cart-btn neon-submit-btn'>
                         Nastavi na plaćanje
                     </Button>
                 </Form>
             </Card>
 
             {(hasMembership || pickupAtGym) && (
-                <Card className='border-0 shadow-soft' style={{
-                    background: 'rgba(204, 255, 0, 0.08)',
-                    padding: '1.5rem',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(204, 255, 0, 0.3)'
-                }}>
-                    <p style={{
-                        color: '#cbd5e1',
-                        margin: 0,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.6
-                    }}>
-                        <strong style={{ color: '#ccff00' }}>ℹ️ Napomena:</strong> Adresa dostave je {
+                <Card className='note-card'>
+                    <p className='note-text'>
+                        <strong className='note-strong'>ℹ️ Napomena:</strong> Adresa dostave je {
                             hasMembership ? 'automatski postavljena za aktivaciju članarine' : 'automatski postavljena na lokaciju teretane'
                         } i ne može se menjati.
                     </p>

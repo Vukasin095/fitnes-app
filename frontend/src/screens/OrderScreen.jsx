@@ -218,46 +218,26 @@ const OrderScreen = () => {
 
     return (
         <>
-            <h1 style={{
-                fontSize: '2rem',
-                fontWeight: 900,
-                color: '#ffffff',
-                marginBottom: '2rem',
-                letterSpacing: '0.02em'
-            }}>
-                📋 Porudžbina #{order._id.substring(0, 8).toUpperCase()}
-            </h1>
+            <h1 className='order-title'>📋 Porudžbina #{order._id.substring(0, 8).toUpperCase()}</h1>
 
             <Row className='gy-4'>
                 {/* LEFT: Order Details */}
                 <Col lg={8}>
                     {/* Shipping Address */}
-                    <Card className='border-0 shadow-soft mb-3' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #ccff00'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#ccff00',
-                            marginBottom: '1.5rem'
-                        }}>
-                            📍 Adresa za isporuku
-                        </h3>
-                        <div style={{ color: '#cbd5e1', lineHeight: 1.8 }}>
-                            <p style={{ marginBottom: '0.8rem' }}>
-                                <strong style={{ color: '#ffffff' }}>Ime:</strong> {order.user.name}
+                    <Card className='order-section-card order-address-card mb-3'>
+                        <h3 className='order-section-title accent-neon'>📍 Adresa za isporuku</h3>
+                        <div className='order-section-text'>
+                            <p>
+                                <strong className='text-white'>Ime:</strong> {order.user.name}
                             </p>
-                            <p style={{ marginBottom: '0.8rem' }}>
-                                <strong style={{ color: '#ffffff' }}>Email:</strong>{' '}
-                                <a href={`mailto:${order.user.email}`} style={{ color: '#ccff00', textDecoration: 'none' }}>
+                            <p>
+                                <strong className='text-white'>Email:</strong>{' '}
+                                <a href={`mailto:${order.user.email}`} className='order-mail-link'>
                                     {order.user.email}
                                 </a>
                             </p>
-                            <p style={{ marginBottom: '0.8rem' }}>
-                                <strong style={{ color: '#ffffff' }}>Adresa:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
+                            <p>
+                                <strong className='text-white'>Adresa:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
                                 {order.shippingAddress.postalCode}, {order.shippingAddress.country}
                             </p>
                         </div>
@@ -271,23 +251,9 @@ const OrderScreen = () => {
                     </Card>
 
                     {/* Payment Status */}
-                    <Card className='border-0 shadow-soft mb-3' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #ff4500'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#ff4500',
-                            marginBottom: '1.5rem'
-                        }}>
-                            💳 Način plaćanja
-                        </h3>
-                        <p style={{ color: '#cbd5e1', marginBottom: '1rem', fontSize: '1.05rem', fontWeight: 700 }}>
-                            {order.paymentMethod}
-                        </p>
+                    <Card className='order-section-card order-payment-card mb-3'>
+                        <h3 className='order-section-title accent-orange'>💳 Način plaćanja</h3>
+                        <p className='order-section-sub'>{order.paymentMethod}</p>
                         {order.isPaid && order.isDelivered ? (
                             <Message variant='success'>✓ Plaćeno i Uručeno</Message>
                         ) : order.isPaid ? (
@@ -301,152 +267,38 @@ const OrderScreen = () => {
 
                     {/* Membership Admin Panel */}
                     {userInfo && userInfo.isAdmin && order?.orderItems?.some((item) => item.category === 'Članarine') && (
-                        <Card className='border-0 shadow-soft mb-3' style={{
-                            background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                            padding: '2rem',
-                            borderRadius: '16px',
-                            borderLeft: '4px solid #22c55e'
-                        }}>
-                            <h3 style={{
-                                fontSize: '1.3rem',
-                                fontWeight: 800,
-                                color: '#22c55e',
-                                marginBottom: '1.5rem'
-                            }}>
-                                👤 Datumi Članarine (Admin)
-                            </h3>
+                        <Card className='order-section-card order-membership-card mb-3'>
+                            <h3 className='order-subheading accent-green'>👤 Datumi Članarine (Admin)</h3>
                             <Form.Group className='mb-3'>
-                                <Form.Label style={{ fontWeight: 700, color: '#cbd5e1' }}>Početak članarine</Form.Label>
-                                <Form.Control
-                                    type='date'
-                                    value={membershipStartDate}
-                                    onChange={(e) => setMembershipStartDate(e.target.value)}
-                                    style={{
-                                        background: '#252a37 !important',
-                                        border: '1px solid #3f485e !important',
-                                        color: '#ffffff !important',
-                                        borderRadius: '10px'
-                                    }}
-                                />
+                                <Form.Label className='form-label'>Početak članarine</Form.Label>
+                                <Form.Control type='date' value={membershipStartDate} onChange={(e) => setMembershipStartDate(e.target.value)} className='form-input' />
                             </Form.Group>
                             <Form.Group className='mb-3'>
-                                <Form.Label style={{ fontWeight: 700, color: '#cbd5e1' }}>Kraj članarine</Form.Label>
-                                <Form.Control
-                                    type='date'
-                                    value={membershipEndDate}
-                                    onChange={(e) => setMembershipEndDate(e.target.value)}
-                                    style={{
-                                        background: '#252a37 !important',
-                                        border: '1px solid #3f485e !important',
-                                        color: '#ffffff !important',
-                                        borderRadius: '10px'
-                                    }}
-                                />
+                                <Form.Label className='form-label'>Kraj članarine</Form.Label>
+                                <Form.Control type='date' value={membershipEndDate} onChange={(e) => setMembershipEndDate(e.target.value)} className='form-input' />
                             </Form.Group>
                             {loadingMembershipUpdate && <Loader />}
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <Button
-                                    type='button'
-                                    className='add-to-cart-btn'
-                                    onClick={updateMembershipDatesHandler}
-                                    disabled={loadingMembershipUpdate}
-                                    style={{
-                                        flex: 1,
-                                        padding: '0.8rem',
-                                        fontWeight: 700,
-                                        borderRadius: '10px',
-                                        fontSize: '0.95rem'
-                                    }}
-                                >
-                                    ✓ Spremi Izmene
-                                </Button>
-                                <Button
-                                    type='button'
-                                    variant='outline-danger'
-                                    onClick={cancelMembershipHandler}
-                                    disabled={loadingMembershipUpdate}
-                                    style={{
-                                        flex: 1,
-                                        padding: '0.8rem',
-                                        fontWeight: 700,
-                                        borderRadius: '10px',
-                                        fontSize: '0.95rem',
-                                        border: '1px solid #ef4444',
-                                        color: '#ef4444'
-                                    }}
-                                >
-                                    ✗ Ukini
-                                </Button>
+                            <div className='order-admin-buttons'>
+                                <Button type='button' className='add-to-cart-btn membership-save-btn' onClick={updateMembershipDatesHandler} disabled={loadingMembershipUpdate}>✓ Spremi Izmene</Button>
+                                <Button type='button' variant='outline-danger' className='membership-cancel-btn' onClick={cancelMembershipHandler} disabled={loadingMembershipUpdate}>✗ Ukini</Button>
                             </div>
                         </Card>
                     )}
 
                     {/* Order Items */}
-                    <Card className='border-0 shadow-soft' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2rem',
-                        borderRadius: '16px',
-                        borderLeft: '4px solid #3b82f6'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.3rem',
-                            fontWeight: 800,
-                            color: '#3b82f6',
-                            marginBottom: '1.5rem'
-                        }}>
-                            📦 Stavke porudžbine
-                        </h3>
+                    <Card className='order-section-card order-items-card mb-3'>
+                        <h3 className='order-section-title accent-blue'>📦 Stavke porudžbine</h3>
                         {order.orderItems.length === 0 ? (
                             <Message>Porudžbina je prazna</Message>
                         ) : (
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '1.5rem'
-                            }}>
+                            <div className='order-items-list'>
                                 {order.orderItems.map((item, index) => (
-                                    <div key={index} style={{
-                                        display: 'flex',
-                                        gap: '1.5rem',
-                                        paddingBottom: '1.5rem',
-                                        borderBottom: index !== order.orderItems.length - 1 ? '1px solid #2e3545' : 'none'
-                                    }}>
-                                        <Image
-                                            src={item.image}
-                                            alt={item.name}
-                                            fluid
-                                            style={{
-                                                maxHeight: '100px',
-                                                maxWidth: '100px',
-                                                objectFit: 'cover',
-                                                borderRadius: '10px'
-                                            }}
-                                        />
-                                        <div style={{ flex: 1 }}>
-                                            <Link to={`/product/${item.product}`} style={{
-                                                color: '#ccff00',
-                                                fontWeight: 700,
-                                                textDecoration: 'none',
-                                                fontSize: '1.05rem',
-                                                marginBottom: '0.5rem',
-                                                display: 'block'
-                                            }}>
-                                                {item.name}
-                                            </Link>
-                                            <div style={{
-                                                color: '#94a3b8',
-                                                fontSize: '0.9rem',
-                                                marginBottom: '0.5rem'
-                                            }}>
-                                                {item.qty} x {item.price.toFixed(2)} RSD
-                                            </div>
-                                            <div style={{
-                                                fontSize: '1.2rem',
-                                                fontWeight: 800,
-                                                color: '#ccff00'
-                                            }}>
-                                                = {(item.qty * item.price).toFixed(2)} RSD
-                                            </div>
+                                    <div key={index} className='order-item-row'>
+                                        <Image src={item.image} alt={item.name} fluid className='order-item-image' />
+                                        <div className='order-item-body'>
+                                            <Link to={`/product/${item.product}`} className='order-item-link'>{item.name}</Link>
+                                            <div className='order-item-meta'>{item.qty} x {item.price.toFixed(2)} RSD</div>
+                                            <div className='order-item-total'>= {(item.qty * item.price).toFixed(2)} RSD</div>
                                         </div>
                                     </div>
                                 ))}
@@ -457,105 +309,38 @@ const OrderScreen = () => {
 
                 {/* RIGHT: Order Summary & Actions */}
                 <Col lg={4}>
-                    <Card className='border-0 shadow-soft mb-3' style={{
-                        background: 'linear-gradient(135deg, #202430, #1c1f2a)',
-                        padding: '2.5rem',
-                        borderRadius: '20px',
-                        position: 'sticky',
-                        top: '110px'
-                    }}>
-                        <h2 style={{
-                            fontSize: '1.6rem',
-                            fontWeight: 900,
-                            color: '#ffffff',
-                            marginBottom: '2rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.04em'
-                        }}>
-                            📋 Ukupno
-                        </h2>
+                    <Card className='order-summary-card mb-3'>
+                        <h2 className='order-summary-heading'>📋 Ukupno</h2>
 
-                        <div style={{
-                            borderTop: '1px solid #2e3545',
-                            borderBottom: '1px solid #2e3545',
-                            padding: '1.5rem 0',
-                            marginBottom: '2rem'
-                        }}>
-                            <Row style={{ marginBottom: '1rem' }}>
-                                <Col>
-                                    <span style={{ color: '#94a3b8' }}>Proizvodi</span>
-                                </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {order.itemsPrice.toFixed(2)} RSD
-                                    </span>
-                                </Col>
+                        <div className='order-summary-lines'>
+                            <Row className='mb-3'>
+                                <Col><span className='order-summary-label'>Proizvodi</span></Col>
+                                <Col className='summary-value'><span className='order-summary-value'>{order.itemsPrice.toFixed(2)} RSD</span></Col>
                             </Row>
-                            <Row style={{ marginBottom: '1rem' }}>
-                                <Col>
-                                    <span style={{ color: '#94a3b8' }}>Cena dostave</span>
-                                </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {order.shippingPrice.toFixed(2)} RSD
-                                    </span>
-                                </Col>
+                            <Row className='mb-3'>
+                                <Col><span className='order-summary-label'>Cena dostave</span></Col>
+                                <Col className='summary-value'><span className='order-summary-value'>{order.shippingPrice.toFixed(2)} RSD</span></Col>
                             </Row>
-                            <Row style={{ marginBottom: '1rem' }}>
-                                <Col>
-                                    <span style={{ color: '#94a3b8' }}>PDV</span>
-                                </Col>
-                                <Col style={{ textAlign: 'right' }}>
-                                    <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                                        {order.taxPrice.toFixed(2)} RSD
-                                    </span>
-                                </Col>
+                            <Row className='mb-3'>
+                                <Col><span className='order-summary-label'>PDV</span></Col>
+                                <Col className='summary-value'><span className='order-summary-value'>{order.taxPrice.toFixed(2)} RSD</span></Col>
                             </Row>
                         </div>
 
-                        <Row style={{
-                            marginBottom: '2rem',
-                            paddingBottom: '1.5rem',
-                            borderBottom: '2px solid #ccff00'
-                        }}>
-                            <Col>
-                                <span style={{
-                                    fontSize: '1.1rem',
-                                    fontWeight: 800,
-                                    color: '#ffffff'
-                                }}>
-                                    UKUPNA CENA:
-                                </span>
-                            </Col>
-                            <Col style={{ textAlign: 'right' }}>
-                                <span style={{
-                                    fontSize: '1.8rem',
-                                    fontWeight: 900,
-                                    color: '#ccff00'
-                                }}>
-                                    {order.totalPrice.toFixed(2)} RSD
-                                </span>
-                            </Col>
+                        <Row className='order-summary-total-row'>
+                            <Col><span className='order-summary-total-label'>UKUPNA CENA:</span></Col>
+                            <Col className='summary-value'><span className='order-summary-total-value'>{order.totalPrice.toFixed(2)} RSD</span></Col>
                         </Row>
 
                         {/* PayPal Payment for Online Orders */}
                         {!order.isPaid && order.paymentMethod !== 'U teretani' && (
-                            <div style={{ marginBottom: '1.5rem' }}>
+                            <div className='mb-3'>
                                 {loadingPay && <Loader />}
                                 {isPending ? (
                                     <Loader />
                                 ) : (
-                                    <div style={{
-                                        background: 'rgba(59, 130, 246, 0.1)',
-                                        padding: '1.5rem',
-                                        borderRadius: '12px',
-                                        border: '1px solid rgba(59, 130, 246, 0.3)'
-                                    }}>
-                                        <PayPalButtons
-                                            createOrder={createOrder}
-                                            onApprove={onApprove}
-                                            onError={onError}
-                                        />
+                                    <div className='paypal-box'>
+                                        <PayPalButtons createOrder={createOrder} onApprove={onApprove} onError={onError} />
                                     </div>
                                 )}
                             </div>
@@ -563,84 +348,31 @@ const OrderScreen = () => {
 
                         {/* Gym Payment - User View */}
                         {!order.isPaid && order.paymentMethod === 'U teretani' && userInfo && !userInfo.isAdmin && (
-                                <Message variant='info' style={{ marginBottom: '1.5rem' }}>
-                                ✓ Porudžbina je uspešno kreirana! Molimo vas da dođete na recepciju teretane kako biste preuzeli proizvode i izvršili plaćanje.
-                            </Message>
+                            <Message variant='info' className='order-message'>✓ Porudžbina je uspešno kreirana! Molimo vas da dođete na recepciju teretane kako biste preuzeli proizvode i izvršili plaćanje.</Message>
                         )}
 
                         {/* Admin Big Bold Button for Gym Payment */}
                         {!order.isPaid && order.paymentMethod === 'U teretani' && userInfo && userInfo.isAdmin && (
-                                <Button
-                                type='button'
-                                className='add-to-cart-btn'
-                                onClick={confirmGymPaymentAndDelivery}
-                                disabled={loadingPayAndDeliver}
-                                style={{
-                                    width: '100%',
-                                    padding: '1.2rem',
-                                    fontSize: '1.1rem',
-                                    fontWeight: 900,
-                                    borderRadius: '14px',
-                                    letterSpacing: '0.03em',
-                                    marginBottom: '1.5rem',
-                                    textTransform: 'uppercase'
-                                }}
-                                >
-                                ✓ Potvrdi plaćanje i preuzimanje
-                            </Button>
+                                <Button type='button' className='add-to-cart-btn admin-confirm-btn' onClick={confirmGymPaymentAndDelivery} disabled={loadingPayAndDeliver}>✓ Potvrdi plaćanje i preuzimanje</Button>
                         )}
 
                         {/* Deliver Button */}
                         {loadingDeliver && <Loader />}
                         {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                            <Button
-                                type='button'
-                                className='add-to-cart-btn'
-                                onClick={deliverOrderHandler}
-                                style={{
-                                    width: '100%',
-                                    padding: '0.8rem',
-                                    fontWeight: 800,
-                                    borderRadius: '12px',
-                                    marginBottom: '1.5rem',
-                                    fontSize: '0.95rem'
-                                }}
-                            >
-                                ✓ Označi kao dostavljeno
-                            </Button>
+                            <Button type='button' className='add-to-cart-btn deliver-btn' onClick={deliverOrderHandler}>✓ Označi kao dostavljeno</Button>
                         )}
 
-                        <div style={{
-                            padding: '0.8rem',
-                            background: 'rgba(59, 130, 246, 0.1)',
-                            borderRadius: '10px',
-                            color: '#93c5fd',
-                            fontSize: '0.85rem',
-                            textAlign: 'center',
-                            lineHeight: 1.6
-                        }}>
-                            ℹ️ Status: {order.isPaid ? '✓ Plaćeno' : '⏳ Čeka se plaćanje'}
-                        </div>
+                        <div className='order-status-note'>ℹ️ Status: {order.isPaid ? '✓ Plaćeno' : '⏳ Čeka se plaćanje'}</div>
                     </Card>
 
                     {/* Discreet Test Button at Bottom (Admin Only) */}
                     {userInfo && userInfo.isAdmin && !order.isPaid && order.paymentMethod !== 'U teretani' && (
-                        <div style={{
-                            textAlign: 'center',
-                            paddingTop: '0.5rem',
-                            marginTop: '1rem'
-                        }}>
+                        <div className='admin-test-button-wrap'>
                             <Button
                                 onClick={onApproveTest}
                                 variant='outline-secondary'
                                 size='sm'
-                                style={{
-                                    fontSize: '0.75rem',
-                                    padding: '0.3rem 0.6rem',
-                                    color: '#64748b',
-                                    border: '1px solid #3f485e',
-                                    opacity: 0.6
-                                }}
+                                className='admin-test-button'
                                 title='Test payment (admin only)'
                             >
                                 🔧
