@@ -52,7 +52,7 @@ const products = [
         name: 'Majica',
         image: 'https://media.istockphoto.com/id/465485415/photo/blue-t-shirt-clipping-path.jpg?s=612x612&w=0&k=20&c=VzE9RWytBIg6wb47plb5kl08brIuzAnlN1B6W1Pd6tg=',
         description:
-            'Opis majice. Ova majica je namenjena studentima koji žele da pokažu svoju ljubav prema FTN Skriptarnici.',
+            'Opis majice. Ova majica je namenjena svima koji žele da pokažu svoju strast prema IronCore energiji i treningu sa stilom.',
         category: 'Merch',
         price: 1000.00,
         countInStock: 7,
@@ -64,7 +64,7 @@ const products = [
         name: 'Ceger',
         image: 'https://media.istockphoto.com/id/2219139040/photo/cotton-canvas-burlap-bag-with-drawstring-mock-up-isolated-zero-waste-concept-eco-sack-made.jpg?s=612x612&w=0&k=20&c=M_wKIgzEEOuagok_l8Fv9lJ2Fc-CwtofLxQshTfjUMQ=',
         description:
-            'Opis cegera. Ovaj ceger je namenjen studentima koji žele da pokažu svoju ljubav prema FTN Skriptarnici.',
+            'Opis cegera. Ovaj ceger je namenjen svima koji žele da nose IronCore snagu sa sobom, bilo da idu u teretanu ili grad.',
         category: 'Merch',
         price: 500.00,
         countInStock: 0,

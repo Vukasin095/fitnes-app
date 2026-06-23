@@ -2,9 +2,9 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'
 
 const Rating = ({ value, text, interactive, onRate, userRating }) => {
     const renderStar = (starValue) => {
-        if (value >= starValue) return <FaStar />
-        if (value >= starValue - 0.5) return <FaStarHalfAlt />
-        return <FaRegStar />
+        if (value >= starValue) return <FaStar style={{ color: '#ccff00' }} />
+        if (value >= starValue - 0.5) return <FaStarHalfAlt style={{ color: '#ccff00' }} />
+        return <FaRegStar style={{ color: '#7c8ca1' }} />
     }
 
     const starClasses = (starValue) =>
@@ -26,11 +26,13 @@ const Rating = ({ value, text, interactive, onRate, userRating }) => {
                             onRate?.(starValue)
                         }
                     }}
+                    aria-label={interactive ? `Rate ${starValue} star${starValue > 1 ? 's' : ''}` : undefined}
+                    style={{ cursor: interactive ? 'pointer' : 'default' }}
                 >
                     {renderStar(starValue)}
                 </span>
             ))}
-            <span className="rating-text">{text && text}</span>
+            <span className='rating-text'>{text && text}</span>
         </div>
     )
 }

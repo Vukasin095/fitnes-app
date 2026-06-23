@@ -39,13 +39,40 @@ const UserEditScreen = () => {
         }
     };
 
+    const inputStyle = {
+        background: '#1f232d',
+        border: '1px solid #3f4756',
+        color: '#e2e8f0',
+        borderRadius: '12px',
+        padding: '0.85rem',
+    };
+
+    const buttonStyle = {
+        marginTop: '1.5rem',
+        width: '100%',
+        background: 'linear-gradient(135deg, #ccff00 0%, #9ae600 100%)',
+        border: '1px solid rgba(204, 255, 0, 0.7)',
+        color: '#0f1117',
+        fontWeight: 800,
+        padding: '0.95rem 0.85rem',
+        borderRadius: '14px',
+        boxShadow: '0 16px 40px rgba(0, 0, 0, 0.18)',
+    };
+
     return (
         <>
-            <Link to='/admin/userlist' className='btn btn-light my-3'>
+            <Link
+                to='/admin/userlist'
+                className='btn btn-outline-light my-3'
+                style={{ borderRadius: '10px', borderColor: '#3f4756', color: '#ffffff' }}
+            >
                 Nazad
             </Link>
             <FormContainer>
-                <h1>Izmena Korisnika</h1>
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <h1 style={{ color: '#ffffff', fontWeight: 900, marginBottom: '0.5rem' }}>Izmena korisnika</h1>
+                    <p style={{ color: '#94a3b8', margin: 0 }}>Ažurirajte status i podatke korisnika u premium administratorskom panelu.</p>
+                </div>
                 {loadingUpdate && <Loader />}
                 {isLoading || !user ? (
                     <Loader />
@@ -53,24 +80,26 @@ const UserEditScreen = () => {
                     <Message variant='danger'>{error}</Message>
                 ) : (
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId='name'>
-                            <Form.Label>Ime</Form.Label>
+                        <Form.Group controlId='name' className='mb-3'>
+                            <Form.Label style={{ color: '#cbd5e1', fontWeight: 700 }}>Ime</Form.Label>
                             <Form.Control
                                 type='text'
                                 placeholder='Unesite ime'
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                            ></Form.Control>
+                                style={inputStyle}
+                            />
                         </Form.Group>
 
-                        <Form.Group controlId='email'>
-                            <Form.Label>Email</Form.Label>
+                        <Form.Group controlId='email' className='mb-3'>
+                            <Form.Label style={{ color: '#cbd5e1', fontWeight: 700 }}>Email</Form.Label>
                             <Form.Control
                                 type='email'
                                 placeholder='Unesite email'
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                            ></Form.Control>
+                                style={inputStyle}
+                            />
                         </Form.Group>
 
                         <Form.Group controlId='isadmin' className='my-2'>
@@ -79,6 +108,7 @@ const UserEditScreen = () => {
                                 label='Admin'
                                 checked={isAdmin}
                                 onChange={(e) => setIsAdmin(e.target.checked)}
+                                style={{ color: '#e2e8f0' }}
                             />
                         </Form.Group>
 
@@ -88,11 +118,12 @@ const UserEditScreen = () => {
                                 label='Member'
                                 checked={isMember}
                                 onChange={(e) => setIsMember(e.target.checked)}
+                                style={{ color: '#e2e8f0' }}
                             />
                         </Form.Group>
 
-                        <Button type='submit' variant='primary' style={{ marginTop: '1rem' }}>
-                            Ažuriraj
+                        <Button type='submit' style={buttonStyle}>
+                            Ažuriraj korisnika
                         </Button>
                     </Form>
                 )}

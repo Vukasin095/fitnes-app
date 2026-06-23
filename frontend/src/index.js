@@ -33,6 +33,7 @@ import ProductEditScreen from './screens/admin/ProductEditScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import UserCreateScreen from './screens/admin/UserCreateScreen';
 import UserListScreen from './screens/admin/UserListScreen';
+import AboutScreen from './screens/AboutScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       <Route path='/memberships' element={<MembershipsScreen />} />
+      <Route path='/o-nama' element={<AboutScreen />} />
 
       <Route path='' element={<PrivateRoute />} >
         <Route path='/shipping' element={<ShippingScreen />} />
