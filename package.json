@@ -1,14 +1,14 @@
 {
-  "name": "veb_skriptarnica",
+  "name": "fitnes-app",
   "version": "1.0.0",
-  "description": "FTN Skriptarnica eCommerce application MERN stack",
-  "homepage": "https://github.com/MasaSaranovic/veb_skriptarnica#readme",
+  "description": "Premium Gym Store & Membership eCommerce application - MERN stack",
+  "homepage": "https://github.com/Vukasin095/fitnes-app#readme",
   "bugs": {
-    "url": "https://github.com/MasaSaranovic/veb_skriptarnica/issues"
+    "url": "https://github.com/Vukasin095/fitnes-app/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MasaSaranovic/veb_skriptarnica.git"
+    "url": "git+https://github.com/Vukasin095/fitnes-app.git"
   },
   "license": "MIT",
   "author": "Vukasin Petkovic",
