@@ -85,8 +85,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
             order.isDelivered = true;
             order.deliveredAt = Date.now();
 
-            // Determine membership duration from product.countInStock
-            // Use the first membership item to set duration
+            
             const membershipItem = order.orderItems.find((i) => i.category === 'Članarine');
             let days = 30; // default
             try {
@@ -114,20 +113,16 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
         for (const item of order.orderItems) {
             if (item.category === 'Članarine') {
-                const product = await Product.findById(item.product);
-                if (product) {
-                    product.countInStock = 30;
-                    await product.save();
-                }
-            } else {
-                const product = await Product.findById(item.product);
-                if (product) {
-                    product.countInStock = Math.max(
-                        0,
-                        product.countInStock - item.qty
-                    );
-                    await product.save();
-                }
+                continue;
+            }
+
+            const product = await Product.findById(item.product);
+            if (product) {
+                product.countInStock = Math.max(
+                    0,
+                    product.countInStock - item.qty
+                );
+                await product.save();
             }
         }
 
@@ -190,17 +185,13 @@ const updateOrderToPaidAndDelivered = asyncHandler(async (req, res) => {
 
         for (const item of order.orderItems) {
             if (item.category === 'Članarine') {
-                const product = await Product.findById(item.product);
-                if (product) {
-                    product.countInStock = 30;
-                    await product.save();
-                }
-            } else {
-                const product = await Product.findById(item.product);
-                if (product) {
-                    product.countInStock = Math.max(0, product.countInStock - item.qty);
-                    await product.save();
-                }
+                continue;
+            }
+
+            const product = await Product.findById(item.product);
+            if (product) {
+                product.countInStock = Math.max(0, product.countInStock - item.qty);
+                await product.save();
             }
         }
 
@@ -258,17 +249,13 @@ const updateOrderMembershipDates = asyncHandler(async (req, res) => {
         // user's isMember for non-epoch dates.
         try {
             if (updatedOrder.membershipEndDate) {
-                const now = Date.now();
                 const endTime = new Date(updatedOrder.membershipEndDate).getTime();
                 const user = await User.findById(updatedOrder.user);
                 if (user) {
                     if (endTime === 0) {
                         // admin cancellation: do not change user.isMember
-                    } else if (endTime >= now) {
-                        user.isMember = true;
-                        await user.save();
                     } else {
-                        user.isMember = false;
+                        user.isMember = true;
                         await user.save();
                     }
                 }
